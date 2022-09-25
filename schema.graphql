@@ -1,6 +1,54 @@
-type ExampleEntity @entity {
+type Contract @entity {
   id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+  address: Bytes!
+  totalSupply: BigInt!
+  removedTraits: [Int!]
+}
+
+type Character @entity {
+  id: ID!
+  tokenId: BigInt!
+  owner: Owner!
+  name: String
+  nameHistory: [String!]
+  createdAt: BigInt!
+  transactionHash: String!
+  traits: TraitMap!
+}
+
+type TraitMap @entity {
+  id: ID!
+  tokenId: BigInt!
+  character: Character! @derivedFrom(field: "traits")
+  tribe: Int!
+  skinColor: Int!
+  furColor: Int!
+  eyeColor: Int!
+  pupilColor: Int!
+  hair: Int!
+  mouth: Int!
+  beard: Int!
+  top: Int!
+  outerwear: Int!
+  print: Int!
+  bottom: Int!
+  footwear: Int!
+  belt: Int!
+  hat: Int!
+  eyewear: Int!
+  piercing: Int!
+  wrist: Int!
+  hands: Int!
+  neckwear: Int!
+  leftItem: Int!
+  rightItem: Int!
+  background: Int!
+}
+
+type Owner @entity {
+  id: ID!
+  address: Bytes!
+  createdAt: BigInt!
+  characters: [Character!] @derivedFrom(field: "owner")
+  characterCount: Int!
 }

@@ -1,4 +1,6 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
+description: NiftyDegen Mainnet NFTs from NiftyLeague
+repository: https://github.com/NiftyLeague/nifty-league-subgraph.git
 schema:
   file: ./schema.graphql
 dataSources:
@@ -6,11 +8,11 @@ dataSources:
     name: NiftyDegen
     network: mainnet
     source:
-      address: "0x986aea67c7d6a15036e18678065eb663fc5be883"
+      address: '0x986aea67c7d6a15036e18678065eb663fc5be883'
       abi: NiftyDegen
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Approval
