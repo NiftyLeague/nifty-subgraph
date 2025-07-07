@@ -1,18 +1,22 @@
 {
   "name": "nifty-league",
   "license": "UNLICENSED",
+  "version": "1.0.5",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league",
-    "create-local": "graph create --node http://localhost:8020/ nifty-league",
-    "remove-local": "graph remove --node http://localhost:8020/ nifty-league",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia",
+    "create-local": "graph create --node http://localhost:8020/ nifty-league-sepolia",
+    "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
     "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.33.1",
-    "@graphprotocol/graph-ts": "0.27.0"
+    "@graphprotocol/graph-cli": "0.97.1",
+    "@graphprotocol/graph-ts": "0.38.1"
   },
-  "devDependencies": { "matchstick-as": "0.5.0" }
+  "devDependencies": {
+    "matchstick-as": "0.6.0"
+  },
+  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
 }
