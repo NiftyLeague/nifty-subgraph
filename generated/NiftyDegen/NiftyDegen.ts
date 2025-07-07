@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
 export class Approval extends ethereum.Event {
@@ -286,7 +286,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "NAME_CHANGE_PRICE",
       "NAME_CHANGE_PRICE():(uint256)",
-      []
+      [],
     );
 
     return result[0].toBigInt();
@@ -296,7 +296,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "NAME_CHANGE_PRICE",
       "NAME_CHANGE_PRICE():(uint256)",
-      []
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -309,7 +309,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "SPECIAL_CHARACTERS",
       "SPECIAL_CHARACTERS():(uint256)",
-      []
+      [],
     );
 
     return result[0].toBigInt();
@@ -319,7 +319,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "SPECIAL_CHARACTERS",
       "SPECIAL_CHARACTERS():(uint256)",
-      []
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -330,7 +330,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   balanceOf(owner: Address): BigInt {
     let result = super.call("balanceOf", "balanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
 
     return result[0].toBigInt();
@@ -338,7 +338,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_balanceOf(owner: Address): ethereum.CallResult<BigInt> {
     let result = super.tryCall("balanceOf", "balanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -353,8 +353,8 @@ export class NiftyDegen extends ethereum.SmartContract {
       "changeName(uint256,string):(string)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId),
-        ethereum.Value.fromString(newName)
-      ]
+        ethereum.Value.fromString(newName),
+      ],
     );
 
     return result[0].toString();
@@ -362,15 +362,15 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_changeName(
     tokenId: BigInt,
-    newName: string
+    newName: string,
   ): ethereum.CallResult<string> {
     let result = super.tryCall(
       "changeName",
       "changeName(uint256,string):(string)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId),
-        ethereum.Value.fromString(newName)
-      ]
+        ethereum.Value.fromString(newName),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -381,7 +381,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   getApproved(tokenId: BigInt): Address {
     let result = super.call("getApproved", "getApproved(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toAddress();
@@ -391,7 +391,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "getApproved",
       "getApproved(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)]
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -401,28 +401,26 @@ export class NiftyDegen extends ethereum.SmartContract {
   }
 
   getCharacterTraits(
-    tokenId: BigInt
+    tokenId: BigInt,
   ): NiftyDegen__getCharacterTraitsResult_characterTraitsStruct {
     let result = super.call(
       "getCharacterTraits",
       "getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)]
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
 
-    return changetype<
-      NiftyDegen__getCharacterTraitsResult_characterTraitsStruct
-    >(result[0].toTuple());
+    return changetype<NiftyDegen__getCharacterTraitsResult_characterTraitsStruct>(
+      result[0].toTuple(),
+    );
   }
 
   try_getCharacterTraits(
-    tokenId: BigInt
-  ): ethereum.CallResult<
-    NiftyDegen__getCharacterTraitsResult_characterTraitsStruct
-  > {
+    tokenId: BigInt,
+  ): ethereum.CallResult<NiftyDegen__getCharacterTraitsResult_characterTraitsStruct> {
     let result = super.tryCall(
       "getCharacterTraits",
       "getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)]
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -430,8 +428,8 @@ export class NiftyDegen extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       changetype<NiftyDegen__getCharacterTraitsResult_characterTraitsStruct>(
-        value[0].toTuple()
-      )
+        value[0].toTuple(),
+      ),
     );
   }
 
@@ -452,7 +450,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   getName(tokenId: BigInt): string {
     let result = super.call("getName", "getName(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toString();
@@ -460,7 +458,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_getName(tokenId: BigInt): ethereum.CallResult<string> {
     let result = super.tryCall("getName", "getName(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -473,7 +471,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "getRemovedTraits",
       "getRemovedTraits():(uint16[])",
-      []
+      [],
     );
 
     return result[0].toI32Array();
@@ -483,7 +481,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "getRemovedTraits",
       "getRemovedTraits():(uint16[])",
-      []
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -496,7 +494,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
 
     return result[0].toBoolean();
@@ -504,12 +502,12 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_isApprovedForAll(
     owner: Address,
-    operator: Address
+    operator: Address,
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -524,8 +522,8 @@ export class NiftyDegen extends ethereum.SmartContract {
       "isAvailableAndAllowedTrait(uint256,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(tribe),
-        ethereum.Value.fromUnsignedBigInt(trait)
-      ]
+        ethereum.Value.fromUnsignedBigInt(trait),
+      ],
     );
 
     return result[0].toBoolean();
@@ -533,15 +531,15 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_isAvailableAndAllowedTrait(
     tribe: BigInt,
-    trait: BigInt
+    trait: BigInt,
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "isAvailableAndAllowedTrait",
       "isAvailableAndAllowedTrait(uint256,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(tribe),
-        ethereum.Value.fromUnsignedBigInt(trait)
-      ]
+        ethereum.Value.fromUnsignedBigInt(trait),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -554,7 +552,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "isAvailableTrait",
       "isAvailableTrait(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(trait)]
+      [ethereum.Value.fromUnsignedBigInt(trait)],
     );
 
     return result[0].toBoolean();
@@ -564,7 +562,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "isAvailableTrait",
       "isAvailableTrait(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(trait)]
+      [ethereum.Value.fromUnsignedBigInt(trait)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -575,7 +573,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   isNameReserved(nameString: string): boolean {
     let result = super.call("isNameReserved", "isNameReserved(string):(bool)", [
-      ethereum.Value.fromString(nameString)
+      ethereum.Value.fromString(nameString),
     ]);
 
     return result[0].toBoolean();
@@ -585,7 +583,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "isNameReserved",
       "isNameReserved(string):(bool)",
-      [ethereum.Value.fromString(nameString)]
+      [ethereum.Value.fromString(nameString)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -596,7 +594,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   isUnique(traitCombo: BigInt): boolean {
     let result = super.call("isUnique", "isUnique(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(traitCombo)
+      ethereum.Value.fromUnsignedBigInt(traitCombo),
     ]);
 
     return result[0].toBoolean();
@@ -604,7 +602,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_isUnique(traitCombo: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("isUnique", "isUnique(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(traitCombo)
+      ethereum.Value.fromUnsignedBigInt(traitCombo),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -645,7 +643,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   ownerOf(tokenId: BigInt): Address {
     let result = super.call("ownerOf", "ownerOf(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toAddress();
@@ -653,7 +651,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_ownerOf(tokenId: BigInt): ethereum.CallResult<Address> {
     let result = super.tryCall("ownerOf", "ownerOf(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -681,7 +679,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.call(
       "supportsInterface",
       "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceId)]
+      [ethereum.Value.fromFixedBytes(interfaceId)],
     );
 
     return result[0].toBoolean();
@@ -691,7 +689,7 @@ export class NiftyDegen extends ethereum.SmartContract {
     let result = super.tryCall(
       "supportsInterface",
       "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceId)]
+      [ethereum.Value.fromFixedBytes(interfaceId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -717,7 +715,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   tokenURI(tokenId: BigInt): string {
     let result = super.call("tokenURI", "tokenURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toString();
@@ -725,7 +723,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_tokenURI(tokenId: BigInt): ethereum.CallResult<string> {
     let result = super.tryCall("tokenURI", "tokenURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -751,7 +749,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   validateName(newName: string): boolean {
     let result = super.call("validateName", "validateName(string):(bool)", [
-      ethereum.Value.fromString(newName)
+      ethereum.Value.fromString(newName),
     ]);
 
     return result[0].toBoolean();
@@ -759,7 +757,7 @@ export class NiftyDegen extends ethereum.SmartContract {
 
   try_validateName(newName: string): ethereum.CallResult<boolean> {
     let result = super.tryCall("validateName", "validateName(string):(bool)", [
-      ethereum.Value.fromString(newName)
+      ethereum.Value.fromString(newName),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();

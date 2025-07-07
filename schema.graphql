@@ -1,12 +1,12 @@
-type Contract @entity {
-  id: ID!
+type Contract @entity(immutable: false) {
+  id: Bytes!
   address: Bytes!
   totalSupply: BigInt!
   removedTraits: [Int!]
 }
 
-type Character @entity {
-  id: ID!
+type Character @entity(immutable: false) {
+  id: Bytes!
   tokenId: BigInt!
   owner: Owner!
   name: String
@@ -16,8 +16,16 @@ type Character @entity {
   traits: TraitMap!
 }
 
-type TraitMap @entity {
-  id: ID!
+type Owner @entity(immutable: false) {
+  id: Bytes!
+  address: Bytes!
+  createdAt: BigInt!
+  characters: [Character!] @derivedFrom(field: "owner")
+  characterCount: Int!
+}
+
+type TraitMap @entity(immutable: true) {
+  id: Bytes!
   tokenId: BigInt!
   character: Character! @derivedFrom(field: "traits")
   tribe: Int!
@@ -45,10 +53,67 @@ type TraitMap @entity {
   background: Int!
 }
 
-type Owner @entity {
-  id: ID!
-  address: Bytes!
-  createdAt: BigInt!
-  characters: [Character!] @derivedFrom(field: "owner")
-  characterCount: Int!
+type Approval @entity(immutable: true) {
+  id: Bytes!
+  owner: Bytes! # address
+  approved: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApprovalForAll @entity(immutable: true) {
+  id: Bytes!
+  owner: Bytes! # address
+  operator: Bytes! # address
+  approved: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type NameUpdated @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  previousName: String! # string
+  newName: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Paused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Unpaused @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }

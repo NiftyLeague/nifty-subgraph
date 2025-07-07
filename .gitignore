@@ -1,6 +1,8 @@
 # Graph CLI generated artifacts
 build/
-generated/
+# generated/
+tests/.bin/
+tests/.latest.json
 
 # Dependency directories
 node_modules/

@@ -1,7 +1,8 @@
 {
   "mainnet": {
     "NiftyDegen": {
-      "address": "0x986aea67c7d6a15036e18678065eb663fc5be883"
+      "address": "0x986aea67c7d6a15036e18678065eb663fc5be883",
+      "startBlock": 13274505
     }
   }
 }
