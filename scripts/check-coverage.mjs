@@ -35,7 +35,7 @@ if (!match) {
 }
 
 const coverage = Number(match[1]);
-const threshold = 25;
+const threshold = 100;
 
 if (coverage < threshold) {
   console.error(`Handler coverage ${coverage}% is below the required ${threshold}%.`);
