@@ -17,6 +17,18 @@ jobs:
         uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high
-          # graph-cli requires this dev-only archive helper and npm has no
-          # patched release; production dependencies remain enforced in CI.
-          allow-ghsas: GHSA-mp2f-45pm-3cg9
+          # graph-cli's dev-only Axios, lodash, and archive-helper chain has no
+          # compatible published fix; production dependencies stay enforced in CI.
+          allow-ghsas: >-
+            GHSA-jr5f-v2jv-69x6,
+            GHSA-r5fr-rjxr-66jc,
+            GHSA-pmwg-cvhr-8vh7,
+            GHSA-pf86-5x62-jrwf,
+            GHSA-6chq-wfr3-2hj9,
+            GHSA-43fc-jf86-j433,
+            GHSA-hfxv-24rg-xrqf,
+            GHSA-p92q-9vqr-4j8v,
+            GHSA-j5f8-grm9-p9fc,
+            GHSA-3g43-6gmg-66jw,
+            GHSA-mp2f-45pm-3cg9,
+            GHSA-pjwm-pj3p-43mv
