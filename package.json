@@ -9,14 +9,19 @@
     "create-local": "graph create --node http://localhost:8020/ nifty-league-sepolia",
     "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
-    "test": "graph test"
-  },
-  "dependencies": {
-    "@graphprotocol/graph-cli": "0.97.1",
-    "@graphprotocol/graph-ts": "0.38.1"
+    "test": "graph test",
+    "test:coverage": "node scripts/check-coverage.mjs"
   },
   "devDependencies": {
-    "matchstick-as": "0.6.0"
+    "@graphprotocol/graph-cli": "0.98.1",
+    "@graphprotocol/graph-ts": "0.38.2",
+    "assemblyscript": "0.19.23",
+    "matchstick-as": "0.6.0",
+    "wabt": "1.0.24"
   },
-  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+  "packageManager": "pnpm@11.13.1",
+  "engines": {
+    "node": "24.x",
+    "pnpm": "11.13.1"
+  }
 }
