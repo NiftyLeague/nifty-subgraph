@@ -1,14 +1,14 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
+import { Bytes, log } from "@graphprotocol/graph-ts";
 import {
   NiftyDegen,
   NameUpdated as NameUpdatedEvent,
   Transfer as TransferEvent,
-} from '../generated/NiftyDegen/NiftyDegen';
-import { Character, Contract, Owner, TraitMap } from '../generated/schema';
-import { getBackground } from './backgrounds';
+} from "../generated/NiftyDegen/NiftyDegen";
+import { Character, Contract, Owner, TraitMap } from "../generated/schema";
+import { getBackground } from "./backgrounds";
 
 export function handleNameUpdated(event: NameUpdatedEvent): void {
-  log.info('NameUpdated tokenId: {} from: {} to: {}', [
+  log.info("NameUpdated tokenId: {} from: {} to: {}", [
     event.params.tokenId.toString(),
     event.params.previousName,
     event.params.newName,
@@ -19,14 +19,15 @@ export function handleNameUpdated(event: NameUpdatedEvent): void {
   if (character !== null) {
     character.name = event.params.newName;
     let nameHistory = character.nameHistory || new Array<string>();
-    if (event.params.previousName.length && nameHistory !== null) nameHistory.push(event.params.previousName);
+    if (event.params.previousName.length && nameHistory !== null)
+      nameHistory.push(event.params.previousName);
     character.nameHistory = nameHistory;
     character.save();
   }
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  log.info('TransferEvent tokenId: {} from: {} to: {}', [
+  log.info("TransferEvent tokenId: {} from: {} to: {}", [
     event.params.tokenId.toString(),
     event.params.from.toHexString(),
     event.params.to.toHexString(),

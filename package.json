@@ -5,6 +5,9 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings=0",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia",
     "create-local": "graph create --node http://localhost:8020/ nifty-league-sepolia",
     "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
@@ -13,10 +16,14 @@
     "test:coverage": "node scripts/check-coverage.mjs"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
     "assemblyscript": "0.19.23",
+    "eslint": "^9.39.5",
     "matchstick-as": "0.6.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.64.0",
     "wabt": "1.0.24"
   },
   "packageManager": "pnpm@11.13.1",
