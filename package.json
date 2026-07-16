@@ -9,7 +9,7 @@
     "create-local": "graph create --node http://localhost:8020/ nifty-league-sepolia",
     "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
-    "test": "graph test",
+    "test": "graph test --version 0.6.0",
     "test:coverage": "node scripts/check-coverage.mjs"
   },
   "devDependencies": {
