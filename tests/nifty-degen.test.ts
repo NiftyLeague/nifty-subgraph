@@ -1,11 +1,35 @@
 import { afterAll, assert, beforeAll, clearStore, describe, mockFunction, test } from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { Character } from '../generated/schema';
-import { handleTransfer, handleNameUpdated } from '../src/nifty-degen';
-import { createNameUpdatedEvent, createTransferEvent } from './nifty-degen-utils';
+import {
+  handleApproval,
+  handleApprovalForAll,
+  handleNameUpdated,
+  handleOwnershipTransferred,
+  handlePaused,
+  handleTransfer,
+  handleUnpaused,
+} from '../src/nifty-degen';
+import {
+  createApprovalEvent,
+  createApprovalForAllEvent,
+  createNameUpdatedEvent,
+  createOwnershipTransferredEvent,
+  createPausedEvent,
+  createTransferEvent,
+  createUnpausedEvent,
+} from './nifty-degen-utils';
 
 // Matchstick counts exported handlers when calculating mapping coverage.
-export { handleTransfer, handleNameUpdated };
+export {
+  handleApproval,
+  handleApprovalForAll,
+  handleNameUpdated,
+  handleOwnershipTransferred,
+  handlePaused,
+  handleTransfer,
+  handleUnpaused,
+};
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#tests-structure
@@ -130,5 +154,54 @@ describe('Describe entity assertions', () => {
 
     // Assert correct Background trait set (DEGEN 10K = Meta)
     assert.fieldEquals('TraitMap', newEntityId, 'background', '2');
+  });
+
+  test('handleApproval records the owner, approved address, and token', () => {
+    let owner = Address.fromString('0x0000000000000000000000000000000000000010');
+    let approved = Address.fromString('0x0000000000000000000000000000000000000011');
+    let event = createApprovalEvent(owner, approved, tokenId);
+    handleApproval(event);
+
+    let id = event.transaction.hash.concatI32(event.logIndex.toI32()).toHexString();
+    assert.fieldEquals('Approval', id, 'owner', owner.toHexString());
+    assert.fieldEquals('Approval', id, 'approved', approved.toHexString());
+    assert.fieldEquals('Approval', id, 'tokenId', tokenId.toString());
+    assert.fieldEquals('Approval', id, 'blockNumber', event.block.number.toString());
+  });
+
+  test('handleApprovalForAll records operator permissions', () => {
+    let owner = Address.fromString('0x0000000000000000000000000000000000000020');
+    let operator = Address.fromString('0x0000000000000000000000000000000000000021');
+    let event = createApprovalForAllEvent(owner, operator, true);
+    handleApprovalForAll(event);
+
+    let id = event.transaction.hash.concatI32(event.logIndex.toI32()).toHexString();
+    assert.fieldEquals('ApprovalForAll', id, 'owner', owner.toHexString());
+    assert.fieldEquals('ApprovalForAll', id, 'operator', operator.toHexString());
+    assert.fieldEquals('ApprovalForAll', id, 'approved', 'true');
+  });
+
+  test('handleOwnershipTransferred records both owners', () => {
+    let previousOwner = Address.fromString('0x0000000000000000000000000000000000000030');
+    let newOwner = Address.fromString('0x0000000000000000000000000000000000000031');
+    let event = createOwnershipTransferredEvent(previousOwner, newOwner);
+    handleOwnershipTransferred(event);
+
+    let id = event.transaction.hash.concatI32(event.logIndex.toI32()).toHexString();
+    assert.fieldEquals('OwnershipTransferred', id, 'previousOwner', previousOwner.toHexString());
+    assert.fieldEquals('OwnershipTransferred', id, 'newOwner', newOwner.toHexString());
+  });
+
+  test('pause handlers record the acting account', () => {
+    let account = Address.fromString('0x0000000000000000000000000000000000000040');
+    let paused = createPausedEvent(account);
+    handlePaused(paused);
+    let pausedId = paused.transaction.hash.concatI32(paused.logIndex.toI32()).toHexString();
+    assert.fieldEquals('Paused', pausedId, 'account', account.toHexString());
+
+    let unpaused = createUnpausedEvent(account);
+    handleUnpaused(unpaused);
+    let unpausedId = unpaused.transaction.hash.concatI32(unpaused.logIndex.toI32()).toHexString();
+    assert.fieldEquals('Unpaused', unpausedId, 'account', account.toHexString());
   });
 });
