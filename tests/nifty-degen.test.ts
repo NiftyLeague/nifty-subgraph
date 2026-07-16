@@ -4,6 +4,9 @@ import { Character } from '../generated/schema';
 import { handleTransfer, handleNameUpdated } from '../src/nifty-degen';
 import { createNameUpdatedEvent, createTransferEvent } from './nifty-degen-utils';
 
+// Matchstick counts exported handlers when calculating mapping coverage.
+export { handleTransfer, handleNameUpdated };
+
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#tests-structure
 
