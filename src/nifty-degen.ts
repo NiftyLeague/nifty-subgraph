@@ -6,7 +6,7 @@ import {
   Paused as PausedEvent,
   Transfer as TransferEvent,
   Unpaused as UnpausedEvent,
-} from '../generated/NiftyDegen/NiftyDegen';
+} from "../generated/NiftyDegen/NiftyDegen";
 import {
   Approval,
   ApprovalForAll,
@@ -15,14 +15,16 @@ import {
   Paused,
   Transfer,
   Unpaused,
-} from '../generated/schema';
+} from "../generated/schema";
 import {
   handleNameUpdated as customHandleNameUpdated,
   handleTransfer as customHandleTransfer,
-} from './custom-mappings';
+} from "./custom-mappings";
 
 export function handleApproval(event: ApprovalEvent): void {
-  let entity = new Approval(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new Approval(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.owner = event.params.owner;
   entity.approved = event.params.approved;
   entity.tokenId = event.params.tokenId;
@@ -35,7 +37,9 @@ export function handleApproval(event: ApprovalEvent): void {
 }
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-  let entity = new ApprovalForAll(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new ApprovalForAll(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.owner = event.params.owner;
   entity.operator = event.params.operator;
   entity.approved = event.params.approved;
@@ -48,7 +52,9 @@ export function handleApprovalForAll(event: ApprovalForAllEvent): void {
 }
 
 export function handleNameUpdated(event: NameUpdatedEvent): void {
-  let entity = new NameUpdated(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new NameUpdated(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.tokenId = event.params.tokenId;
   entity.previousName = event.params.previousName;
   entity.newName = event.params.newName;
@@ -62,8 +68,12 @@ export function handleNameUpdated(event: NameUpdatedEvent): void {
   customHandleNameUpdated(event);
 }
 
-export function handleOwnershipTransferred(event: OwnershipTransferredEvent): void {
-  let entity = new OwnershipTransferred(event.transaction.hash.concatI32(event.logIndex.toI32()));
+export function handleOwnershipTransferred(
+  event: OwnershipTransferredEvent,
+): void {
+  let entity = new OwnershipTransferred(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.previousOwner = event.params.previousOwner;
   entity.newOwner = event.params.newOwner;
 
@@ -75,7 +85,9 @@ export function handleOwnershipTransferred(event: OwnershipTransferredEvent): vo
 }
 
 export function handlePaused(event: PausedEvent): void {
-  let entity = new Paused(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new Paused(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.account = event.params.account;
 
   entity.blockNumber = event.block.number;
@@ -86,7 +98,9 @@ export function handlePaused(event: PausedEvent): void {
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new Transfer(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.from = event.params.from;
   entity.to = event.params.to;
   entity.tokenId = event.params.tokenId;
@@ -101,7 +115,9 @@ export function handleTransfer(event: TransferEvent): void {
 }
 
 export function handleUnpaused(event: UnpausedEvent): void {
-  let entity = new Unpaused(event.transaction.hash.concatI32(event.logIndex.toI32()));
+  let entity = new Unpaused(
+    event.transaction.hash.concatI32(event.logIndex.toI32()),
+  );
   entity.account = event.params.account;
 
   entity.blockNumber = event.block.number;
