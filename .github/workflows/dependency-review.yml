@@ -17,3 +17,6 @@ jobs:
         uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high
+          # graph-cli requires this dev-only archive helper and npm has no
+          # patched release; production dependencies remain enforced in CI.
+          allow-ghsas: GHSA-mp2f-45pm-3cg9
