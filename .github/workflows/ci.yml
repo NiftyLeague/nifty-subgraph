@@ -39,4 +39,4 @@ jobs:
       - name: Test coverage
         run: bun run test:coverage
       - name: Audit
-        run: bun pm audit --audit-level=high
+        run: bun audit --audit-level=high
