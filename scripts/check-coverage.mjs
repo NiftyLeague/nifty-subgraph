@@ -1,9 +1,9 @@
 import { spawn } from "node:child_process";
 
-const command = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+const command = process.platform === "win32" ? "bun" : "bun";
 const child = spawn(
   command,
-  ["exec", "graph", "test", "--version", "0.6.0", "--coverage"],
+  ["x", "graph", "test", "--version", "0.6.0", "--coverage"],
   {
     stdio: ["inherit", "pipe", "pipe"],
   },
