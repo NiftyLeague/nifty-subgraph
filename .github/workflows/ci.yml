@@ -36,8 +36,8 @@ jobs:
       - name: Lint
         run: bun lint
 
-      - name: Type-check
-        run: bun type:check
+      - name: Codegen (subgraph schema validation)
+        run: bunx graph codegen
 
       - name: Build
         run: bun build
