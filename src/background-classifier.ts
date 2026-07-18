@@ -6,13 +6,9 @@ import { LEGGIES, METAS, RARES } from './constants'
 
 export type BackgroundType = 'Legendary' | 'Meta' | 'Rare' | 'Common'
 
-const LEGGIES_SET = new Set<number>(LEGGIES)
-const METAS_SET = new Set<number>(METAS)
-const RARES_SET = new Set<number>(RARES)
-
 export function classifyBackground(tokenId: number): BackgroundType {
-  if (LEGGIES_SET.has(tokenId)) return 'Legendary'
-  if (METAS_SET.has(tokenId)) return 'Meta'
-  if (RARES_SET.has(tokenId)) return 'Rare'
+  if (LEGGIES.indexOf(tokenId) !== -1) return 'Legendary'
+  if (METAS.indexOf(tokenId) !== -1) return 'Meta'
+  if (RARES.indexOf(tokenId) !== -1) return 'Rare'
   return 'Common'
 }
