@@ -5,6 +5,7 @@
     "": {
       "name": "nifty-league",
       "devDependencies": {
+        "@assemblyscript/loader": "^0.28.19",
         "@eslint/js": "^9.39.5",
         "@graphprotocol/graph-cli": "0.98.1",
         "@graphprotocol/graph-ts": "0.38.2",
@@ -19,6 +20,8 @@
     },
   },
   "packages": {
+    "@assemblyscript/loader": ["@assemblyscript/loader@0.28.19", "", {}, "sha512-6OhPTJ0nS8aay8t2lhbA/XkyffgU15ECPsLHT0VZFG7j7sUA1CT2HS7nIALwjg6Pdpgp+RTHQukgK1IoCUbxCQ=="],
+
     "@babel/code-frame": ["@babel/code-frame@7.29.7", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.29.7", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw=="],
 
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.29.7", "", {}, "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg=="],
