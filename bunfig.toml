@@ -1,0 +1,6 @@
+[test]
+# bun:test runs pure-logic unit tests alongside the graph test (matchstick) suite.
+# The subgraph's AssemblyScript source is exercised by `graph test`; these bun
+# tests cover the framework-agnostic classification logic and constant tables.
+root = "./bun-tests"
+exclude = ["node_modules", "dist", "generated", "tests"]

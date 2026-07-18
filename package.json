@@ -12,11 +12,12 @@
     "create-local": "graph create --node http://localhost:8020/ nifty-league-sepolia",
     "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
-    "test": "graph test --version 0.6.0",
+    "test": "bun test bun-tests",
     "test:coverage": "node scripts/check-coverage.mjs",
     "dev": "graph create --node http://localhost:8020/ nifty-league-sepolia && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
     "start": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
-    "type:check": "tsc --noEmit"
+    "type:check": "tsc --noEmit",
+    "test:graph": "graph test --version 0.6.0"
   },
   "devDependencies": {
     "@assemblyscript/loader": "^0.28.19",
