@@ -69,10 +69,9 @@ export function handleTransfer(event: TransferEvent): void {
   // Create or update the DEGEN Character entity & TraitMap
   let id = changetype<Bytes>(Bytes.fromBigInt(event.params.tokenId))
   let character = Character.load(id)
-  let traits = TraitMap.load(id)
 
   if (character === null) {
-    traits = new TraitMap(id)
+    let traits = new TraitMap(id)
     let traitList = contract.getCharacterTraits(event.params.tokenId)
     traits.tokenId = event.params.tokenId
     traits.tribe = traitList.tribe
