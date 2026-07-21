@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
+# CI security gate: scans bun.lock for vulnerabilities via osv-scanner.
+# Passes ONLY if every detected advisory is in the allowlist below.
+# The 22 entries are dev/build-time transitive vulns (axios@0.21.4 via
+# @graphprotocol/graph-cli -> gluegun -> apisauce, and decompress@4.2.1)
+# with NO available upstream fix. Any NEW advisory fails the build loudly.
 set -euo pipefail
 
 ALLOWLIST=(
-  GHSA-3g43-6gmg-66jw GHSA-3p68-rc4w-qgx5 GHSA-43fc-jf86-j433 GHSA-52cp-r559-cp3m
-  GHSA-5c9x-8gcm-mpgx GHSA-62hf-57xw-28j9 GHSA-6chq-wfr3-2hj9 GHSA-7q8q-rj6j-mhjq
-  GHSA-898c-q2cr-xwhg GHSA-fvcv-3m26-pcqx GHSA-hfxv-24rg-xrqf GHSA-j5f8-grm9-p9fc
-  GHSA-jr5f-v2jv-69x6 GHSA-m7pr-hjqh-92cm GHSA-mmx7-hfxf-jppx GHSA-mp2f-45pm-3cg9
-  GHSA-p92q-9vqr-4j8v GHSA-pf86-5x62-jrwf GHSA-pjwm-pj3p-43mv GHSA-pmwg-cvhr-8vh7
-  GHSA-vf2m-468p-8v99 GHSA-w9j2-pvgh-6h63 GHSA-wf5p-g6vw-rhxx GHSA-xhjh-pmcv-23jw
-  GHSA-v56q-mh7h-f735 GHSA-xvcm-6775-5m9r GHSA-mh99-v99m-4gvg GHSA-xx6v-rp6x-q39c
+  GHSA-3g43-6gmg-66jw GHSA-3p68-rc4w-qgx5 GHSA-43fc-jf86-j433 GHSA-5c9x-8gcm-mpgx
+  GHSA-62hf-57xw-28j9 GHSA-6chq-wfr3-2hj9 GHSA-898c-q2cr-xwhg GHSA-fvcv-3m26-pcqx
+  GHSA-hfxv-24rg-xrqf GHSA-j5f8-grm9-p9fc GHSA-jr5f-v2jv-69x6 GHSA-m7pr-hjqh-92cm
+  GHSA-mp2f-45pm-3cg9 GHSA-p92q-9vqr-4j8v GHSA-pf86-5x62-jrwf GHSA-pjwm-pj3p-43mv
+  GHSA-pmwg-cvhr-8vh7 GHSA-vf2m-468p-8v99 GHSA-w9j2-pvgh-6h63 GHSA-wf5p-g6vw-rhxx
+  GHSA-xhjh-pmcv-23jw GHSA-xx6v-rp6x-q39c
 )
 
+# osv-scanner exits non-zero when vulns exist; capture JSON regardless.
 SCAN_JSON=$(osv-scanner --lockfile bun.lock --format json 2>/dev/null || true)
 
+# Extract unique advisory IDs.
 FOUND=$(echo "$SCAN_JSON" | node -e '
   let s=""; process.stdin.on("data",d=>s+=d); process.stdin.on("end",()=>{
     try { const d=JSON.parse(s); const ids=new Set();
