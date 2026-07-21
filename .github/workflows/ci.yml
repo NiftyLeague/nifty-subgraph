@@ -174,7 +174,7 @@ jobs:
         run: bun run test
 
   security:
-    name: CI / Security Scan
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
