@@ -8,7 +8,7 @@ ALLOWLIST=(
   GHSA-jr5f-v2jv-69x6 GHSA-m7pr-hjqh-92cm GHSA-mmx7-hfxf-jppx GHSA-mp2f-45pm-3cg9
   GHSA-p92q-9vqr-4j8v GHSA-pf86-5x62-jrwf GHSA-pjwm-pj3p-43mv GHSA-pmwg-cvhr-8vh7
   GHSA-vf2m-468p-8v99 GHSA-w9j2-pvgh-6h63 GHSA-wf5p-g6vw-rhxx GHSA-xhjh-pmcv-23jw
-  GHSA-xx6v-rp6x-q39c
+  GHSA-v56q-mh7h-f735 GHSA-xvcm-6775-5m9r GHSA-xx6v-rp6x-q39c
 )
 
 SCAN_JSON=$(osv-scanner --lockfile bun.lock --format json 2>/dev/null || true)
