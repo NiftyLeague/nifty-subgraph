@@ -8,8 +8,8 @@ export class Background {
   constructor(id: i32) {
     this.id = id
     if (id === 3) this.type = 'Legendary'
-    if (id === 2) this.type = 'Meta'
-    if (id === 1) this.type = 'Rare'
+    else if (id === 2) this.type = 'Meta'
+    else if (id === 1) this.type = 'Rare'
     else this.type = 'Common'
   }
 }

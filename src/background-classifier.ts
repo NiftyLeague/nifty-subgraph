@@ -12,3 +12,12 @@ export function classifyBackground(tokenId: number): BackgroundType {
   if (RARES.indexOf(tokenId) !== -1) return 'Rare'
   return 'Common'
 }
+
+// Mirrors the Background class constructor in src/backgrounds.ts.
+// Returns a plain JS object instead of an AS class instance.
+export function createBackground(id: number): { id: number; type: BackgroundType } {
+  if (id === 3) return { id, type: 'Legendary' }
+  else if (id === 2) return { id, type: 'Meta' }
+  else if (id === 1) return { id, type: 'Rare' }
+  else return { id, type: 'Common' }
+}

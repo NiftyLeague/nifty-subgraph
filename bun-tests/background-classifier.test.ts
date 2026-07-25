@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { LEGGIES, METAS, RARES } from '../src/constants'
-import { classifyBackground } from '../src/background-classifier'
+import { classifyBackground, createBackground } from '../src/background-classifier'
 
 describe('background rarity tables', () => {
   it('exposes non-empty, sorted, deduplicated rarity arrays', () => {
@@ -40,5 +40,34 @@ describe('classifyBackground', () => {
     const seen = new Set<string>()
     for (let id = 0; id < 10000; id++) seen.add(classifyBackground(id))
     expect([...seen]).toEqual(expect.arrayContaining(['Legendary', 'Meta', 'Rare', 'Common']))
+  })
+})
+
+describe('createBackground', () => {
+  it('assigns Legendary type for id 3', () => {
+    expect(createBackground(3)).toEqual({ id: 3, type: 'Legendary' })
+  })
+
+  it('assigns Meta type for id 2', () => {
+    expect(createBackground(2)).toEqual({ id: 2, type: 'Meta' })
+  })
+
+  it('assigns Rare type for id 1', () => {
+    expect(createBackground(1)).toEqual({ id: 1, type: 'Rare' })
+  })
+
+  it('assigns Common type for id 0', () => {
+    expect(createBackground(0)).toEqual({ id: 0, type: 'Common' })
+  })
+
+  it('assigns Common type for unlisted token ids', () => {
+    expect(createBackground(234)).toEqual({ id: 234, type: 'Common' })
+    expect(createBackground(9999)).toEqual({ id: 9999, type: 'Common' })
+  })
+
+  it('never returns an unknown tier', () => {
+    const seen = new Set<string>()
+    for (let id = 0; id < 10000; id++) seen.add(createBackground(id).type)
+    expect([...seen].sort()).toEqual(['Common', 'Legendary', 'Meta', 'Rare'])
   })
 })
