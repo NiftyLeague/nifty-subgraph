@@ -25,21 +25,58 @@ Agents must follow these rules before changing code:
 
 Agents must not:
 
-- Use destructive Git operations, force pushes, or history rewriting without explicit authorization.
-- Bypass hooks or required checks to hide a failure.
-- Change branch protections, secrets, deployments, or external systems unless that action is explicitly in scope.
-- Claim completion when tests, deployment checks, or required reviews are still pending.
+| Component        | Technology                                      |
+| ---------------- | ----------------------------------------------- |
+| Subgraph CLI     | `@graphprotocol/graph-cli` 0.98.1               |
+| Graph TypeScript | `@graphprotocol/graph-ts` 0.38.2                |
+| Mapping language | AssemblyScript 0.19.23 (`src/*.ts`)             |
+| Schema           | GraphQL SDL (`schema.graphql`)                  |
+| Runtime          | Node.js 24.18.0 via `mise`                      |
+| Package manager  | Bun 1.3.14 (`bun.lock`, never npm/pnpm/yarn)    |
+| Linting          | ESLint 10 + Prettier 3                          |
+| Testing          | Bun's native `bun:test` runner (`bun-tests/`)   |
+| Hooks            | Husky 9 + lint-staged (pre-commit)              |
+| Deploy target    | The Graph Studio (slug `nifty-league-sepolia`)  |
 
 ## Branching model
 
-```text
-                                      release PR
-                                   ┌──────────────┐
-                                   │              ▼
-feat/*  fix/*  chore/*  ──PR──▶  staging  ──PR──▶  main
-docs/*  test/*  refactor/*         │              │
-                                   │              └── protected release branch
-                                   └── integration branch
+| File / Dir                | Purpose                                      |
+| ------------------------- | -------------------------------------------- |
+| `schema.graphql`          | GraphQL entity definitions                   |
+| `src/`                    | AssemblyScript mapping handlers              |
+| `subgraph.yaml`           | Mainnet subgraph manifest                    |
+| `configs/`                | Per-network manifests (mainnet, sepolia)     |
+| `generated/`              | Codegen output (`.ts` AssemblyScript types)  |
+| `build/`                  | Compiled WASM output                         |
+| `bun-tests/`              | Unit tests using `bun:test`                  |
+| `abis/`                   | Contract ABI JSON files                      |
+
+### Commands
+
+All from the repo root via `bun run <script>`.
+
+| Script            | What it does                                                |
+| ----------------- | ----------------------------------------------------------- |
+| `bun install --frozen-lockfile` | Install deps against pinned `bun.lock`      |
+| `bun run codegen`  | Generate AssemblyScript types from `schema.graphql`         |
+| `bun run build`    | Compile subgraph to WASM (`graph build`)                    |
+| `bun run test`     | Run unit tests (`bun test bun-tests`)                       |
+| `bun run lint`     | ESLint with `--max-warnings=0`                              |
+| `bun run format:check` | Prettier formatting gate                                 |
+| `bun run format:fix`   | Auto-format with Prettier                               |
+| `bun run type:check`   | TypeScript sanity check (`tsc --noEmit`)                |
+| `bun run deploy`       | Deploy to The Graph Studio                             |
+
+---
+
+## 2. Branching Model
+
+```
+main  ───────────────────────────────────── (protected, releases only)
+  ↑  staging→main PR (squash merge)
+staging ───────────────────────────────── (integration, CI must pass)
+  ↑  sub-branch → staging PR (squash merge)
+feat/foo  fix/bar  chore/baz  ...          (feature branches)
 ```
 
 | Branch                                                         | Purpose                  | Contribution rule                                                         |
