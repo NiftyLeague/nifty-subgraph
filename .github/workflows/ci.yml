@@ -162,6 +162,8 @@ jobs:
           task: build
       - name: Build
         run: bun run build
+      - name: Build Sepolia
+        run: bun run build:sepolia
 
   test:
     name: Test
