@@ -27,11 +27,11 @@
     "test:graph": "graph test --version 0.6.0"
   },
   "devDependencies": {
-    "@assemblyscript/loader": "^0.28.20",
+    "@assemblyscript/loader": "0.28.19",
     "@eslint/js": "10.0.1",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
-    "assemblyscript": "0.28.20",
+    "assemblyscript": "0.19.23",
     "eslint": "10.8.0",
     "lint-staged": "17.2.0",
     "matchstick-as": "0.6.0",
