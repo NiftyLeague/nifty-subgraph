@@ -150,6 +150,11 @@ type_check() {
 }
 
 build() {
+  # Some frameworks validate session secrets while statically collecting pages.
+  # Keep CI builds deterministic without weakening runtime/deployment validation.
+  if [ "${CI:-}" = true ] && [ -z "${NEXTAUTH_SECRET:-}" ]; then
+    export NEXTAUTH_SECRET="ci-only-build-secret-not-for-runtime-0123456789"
+  fi
   run_script build
   if [ -f Cargo.toml ]; then cargo build --all-targets --all-features; fi
 }
@@ -175,13 +180,12 @@ unit() {
     elif has_rust_target bin; then cargo test --bins --all-features
     else echo "Skipping Rust unit tests (no library or binary target)"; fi
   fi
-  has_py_tests() { find "$1" -maxdepth 2 -name '*.py' 2>/dev/null | grep -q .; }
-  if [ -d tests/unit ] && has_py_tests tests/unit && python -c 'import importlib.util; raise SystemExit(importlib.util.find_spec("pytest") is None)' 2>/dev/null; then
+  if [ -d tests/unit ] && python -c 'import importlib.util; raise SystemExit(importlib.util.find_spec("pytest") is None)' 2>/dev/null; then
     coverage_args=()
     while IFS= read -r arg; do [ -n "$arg" ] && coverage_args+=("$arg"); done < <(python_coverage_args)
     [ "${#coverage_args[@]}" -gt 0 ] || coverage_args=(--cov)
     env -u MISE_GITHUB_TOKEN -u MISE_TRUSTED_CONFIG_PATHS -u MISE_YES -u MISE_LOG_LEVEL -u PYTHONHOME PYTHONPATH="$PWD/.github/scripts" python -m pytest -q tests/unit "${coverage_args[@]}" --cov-report=term-missing --cov-fail-under="${PYTHON_COVERAGE_MIN:-80}"
-  elif [ -d tests ] && [ ! -d tests/integration ] && has_py_tests tests && python -c 'import importlib.util; raise SystemExit(importlib.util.find_spec("pytest") is None)' 2>/dev/null; then
+  elif [ -d tests ] && [ ! -d tests/integration ] && python -c 'import importlib.util; raise SystemExit(importlib.util.find_spec("pytest") is None)' 2>/dev/null; then
     coverage_args=()
     while IFS= read -r arg; do [ -n "$arg" ] && coverage_args+=("$arg"); done < <(python_coverage_args)
     [ "${#coverage_args[@]}" -gt 0 ] || coverage_args=(--cov)
