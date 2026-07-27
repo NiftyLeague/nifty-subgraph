@@ -31,7 +31,7 @@
     "@eslint/js": "10.0.1",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
-    "assemblyscript": "0.19.23",
+    "assemblyscript": "0.28.20",
     "eslint": "10.8.0",
     "lint-staged": "17.2.0",
     "matchstick-as": "0.6.0",
@@ -39,7 +39,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "^8.65.0",
     "wabt": "1.0.39",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   },
   "overrides": {
     "undici": "7.28.0",
