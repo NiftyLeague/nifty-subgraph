@@ -10,26 +10,9 @@ They complement `CONTRIBUTING.md`. More specific instructions in nested `AGENTS.
 - Prefer the versions pinned in `.mise.toml`.
 - Do not commit secrets, generated credentials, local environment files, or machine-specific paths.
 - Add tests for behavior changes and keep coverage thresholds explicit in the project configuration.
-- Make the smallest complete, well-tested change that solves the requested problem without disturbing unrelated work.
+  Make the smallest complete, well-tested change that solves the requested problem without disturbing unrelated work.
 
-| Script                                                             | Command                                                                                                          | Purpose                                                                                                                                                        |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `install`                                                          | `bun install --frozen-lockfile`                                                                                  | Install deps against pinned `bun.lock` (what CI uses).                                                                                                         |
-| `codegen`                                                          | `graph codegen`                                                                                                  | Generate AssemblyScript types (default = mainnet).                                                                                                             |
-| `codegen:mainnet`                                                  | `graph codegen configs/subgraph.mainnet.yaml`                                                                    | Generate types from mainnet manifest.                                                                                                                          |
-| `codegen:sepolia`                                                  | `graph codegen configs/subgraph.sepolia.yaml`                                                                    | Generate types from sepolia manifest.                                                                                                                          |
-| `build`                                                            | `graph build`                                                                                                    | Compile mainnet subgraph to WASM into `build/`.                                                                                                                |
-| `build:mainnet`                                                    | `graph build configs/subgraph.mainnet.yaml`                                                                      | Compile mainnet subgraph from manifest in `configs/`.                                                                                                          |
-| `build:sepolia`                                                    | `graph build configs/subgraph.sepolia.yaml`                                                                      | Compile sepolia subgraph from manifest in `configs/`.                                                                                                          |
-| `test`                                                             | `bun test bun-tests`                                                                                             | Run Bun's native test runner over the `bun-tests/` directory. Imports from `bun:test` (`describe`/`it`/`expect`).                                              |
-| `type:check`                                                       | `tsc --noEmit`                                                                                                   | TypeScript type-check (editor/CI sanity). Uses `tsconfig.json` which extends `@graphprotocol/graph-ts/types/tsconfig.base.json` and sets `skipLibCheck: true`. |
-| `lint`                                                             | `eslint . --max-warnings=0`                                                                                      | Lint everything; fails on any warning.                                                                                                                         |
-| `format`                                                           | `prettier --write .`                                                                                             | Auto-format.                                                                                                                                                   |
-| `format:check`                                                     | `prettier --check .`                                                                                             | CI formatting gate.                                                                                                                                            |
-| `deploy`                                                           | `graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia`                               | Deploy mainnet subgraph to The Graph Studio.                                                                                                                   |
-| `deploy:mainnet`                                                   | `graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia configs/subgraph.mainnet.yaml` | Deploy mainnet from manifest in `configs/`.                                                                                                                    |
-| `deploy:sepolia`                                                   | `graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia configs/subgraph.sepolia.yaml` | Deploy sepolia from manifest in `configs/`.                                                                                                                    |
-| `create-local` / `remove-local` / `deploy-local` / `dev` / `start` | (see `package.json`)                                                                                             | Local graph-node flow on `localhost:8020` + IPFS `5001`.                                                                                                       |
+This repository may contain TypeScript, Rust, Python, or any combination of them. Detect the active stack from the files present; do not assume every check applies.
 
 ## Read before acting
 
@@ -79,11 +62,10 @@ Ask for clarification when a missing decision would materially change the implem
 2. Inspect before editing; preserve unrelated work.
 3. Plan the smallest coherent change.
 4. Implement with existing project patterns.
-5. Run bash .github/scripts/bootstrap.sh for a new checkout, or bash .github/scripts/doctor.sh to diagnose setup drift.
-6. Run focused checks while iterating.
-7. Inspect the final diff for accidental changes, secrets, formatting, and generated files.
-8. Run the broadest applicable validation available.
-9. Report what changed, exact checks and results, skipped checks with reasons, risks, and remaining work.
+5. Run focused checks while iterating.
+6. Inspect the final diff for accidental changes, secrets, formatting, and generated files.
+7. Run the broadest applicable validation available.
+8. Report what changed, exact checks and results, skipped checks with reasons, risks, and remaining work.
 
 For normal feature work, branch from `staging` and target pull requests at `staging`. Treat `main` as the protected release branch. Follow `.github/CONTRIBUTING.md` for the complete internal and external contribution flow.
 
@@ -120,8 +102,7 @@ Run focused tests first, then the complete applicable set for release, security,
 
 At minimum:
 
-- TypeScript/JavaScript: Prettier formatting, ESLint linting, type-check, build, and Bun's native test runner for unit/integration tests; use the project's native browser runner for E2E tests
-- Do not add Vitest. Preserve specialized native runners such as Matchstick for The Graph and Hardhat for smart contracts.
+- TypeScript/JavaScript: Prettier formatting, ESLint linting, type-check, build, unit tests, and relevant browser/integration tests
 - Rust: default rustfmt, Clippy with warnings treated as errors, check, unit/integration tests, and dependency audit
 - Python: Ruff formatting and linting, compile or type checks, pytest, coverage, and dependency audit
 - Mixed projects: validate each active ecosystem and its integration boundaries
@@ -142,7 +123,6 @@ If a check cannot run, state the exact reason. A skipped check is not a passing 
 - Use `push` for `main, staging` and `pull_request` for `staging` unless a workflow has a documented event-specific reason.
 - Give workflows clear names and jobs concise names; avoid repeating the workflow name in the job name.
 - Use per-workflow concurrency groups that cancel superseded runs while allowing independent workflows to run in parallel.
-- Keep setup language-aware and cache dependency downloads by lockfile; do not cache secrets, `node_modules`, virtual environments, or broad build output without a measured reason.
 - Use least-privilege permissions and pin action versions consistently with the template.
 - Keep CI, Test, Security, CodeQL, Draft PR, Release PR, and Release concerns separated.
 - Security and CodeQL may skip when repository visibility or GitHub plan support does not permit them. Do not make an unavailable check required.

@@ -25,58 +25,21 @@ Agents must follow these rules before changing code:
 
 Agents must not:
 
-| Component        | Technology                                     |
-| ---------------- | ---------------------------------------------- |
-| Subgraph CLI     | `@graphprotocol/graph-cli` 0.98.1              |
-| Graph TypeScript | `@graphprotocol/graph-ts` 0.38.2               |
-| Mapping language | AssemblyScript 0.19.23 (`src/*.ts`)            |
-| Schema           | GraphQL SDL (`schema.graphql`)                 |
-| Runtime          | Node.js 24.18.0 via `mise`                     |
-| Package manager  | Bun 1.3.14 (`bun.lock`, never npm/pnpm/yarn)   |
-| Linting          | ESLint 10 + Prettier 3                         |
-| Testing          | Bun's native `bun:test` runner (`bun-tests/`)  |
-| Hooks            | Husky 9 + lint-staged (pre-commit)             |
-| Deploy target    | The Graph Studio (slug `nifty-league-sepolia`) |
+- Use destructive Git operations, force pushes, or history rewriting without explicit authorization.
+- Bypass hooks or required checks to hide a failure.
+- Change branch protections, secrets, deployments, or external systems unless that action is explicitly in scope.
+- Claim completion when tests, deployment checks, or required reviews are still pending.
 
 ## Branching model
 
-| File / Dir       | Purpose                                     |
-| ---------------- | ------------------------------------------- |
-| `schema.graphql` | GraphQL entity definitions                  |
-| `src/`           | AssemblyScript mapping handlers             |
-| `subgraph.yaml`  | Mainnet subgraph manifest                   |
-| `configs/`       | Per-network manifests (mainnet, sepolia)    |
-| `generated/`     | Codegen output (`.ts` AssemblyScript types) |
-| `build/`         | Compiled WASM output                        |
-| `bun-tests/`     | Unit tests using `bun:test`                 |
-| `abis/`          | Contract ABI JSON files                     |
-
-### Commands
-
-All from the repo root via `bun run <script>`.
-
-| Script                          | What it does                                        |
-| ------------------------------- | --------------------------------------------------- |
-| `bun install --frozen-lockfile` | Install deps against pinned `bun.lock`              |
-| `bun run codegen`               | Generate AssemblyScript types from `schema.graphql` |
-| `bun run build`                 | Compile subgraph to WASM (`graph build`)            |
-| `bun run test`                  | Run unit tests (`bun test bun-tests`)               |
-| `bun run lint`                  | ESLint with `--max-warnings=0`                      |
-| `bun run format:check`          | Prettier formatting gate                            |
-| `bun run format:fix`            | Auto-format with Prettier                           |
-| `bun run type:check`            | TypeScript sanity check (`tsc --noEmit`)            |
-| `bun run deploy`                | Deploy to The Graph Studio                          |
-
----
-
-## 2. Branching Model
-
-```
-main  ───────────────────────────────────── (protected, releases only)
-  ↑  staging→main PR (squash merge)
-staging ───────────────────────────────── (integration, CI must pass)
-  ↑  sub-branch → staging PR (squash merge)
-feat/foo  fix/bar  chore/baz  ...          (feature branches)
+```text
+                                      release PR
+                                   ┌──────────────┐
+                                   │              ▼
+feat/*  fix/*  chore/*  ──PR──▶  staging  ──PR──▶  main
+docs/*  test/*  refactor/*         │              │
+                                   │              └── protected release branch
+                                   └── integration branch
 ```
 
 | Branch                                                         | Purpose                  | Contribution rule                                                         |
@@ -92,8 +55,13 @@ Use squash merges unless the repository documents another strategy. Re-align `st
 ### Toolchain
 
 1. Install [mise](https://mise.jdx.dev/).
-2. Run `bash .github/scripts/bootstrap.sh` to install the pinned toolchain, enable hooks, and validate the checkout.
-3. Use `bash .github/scripts/doctor.sh` when setup, lockfiles, or hooks appear out of sync.
+2. Run `mise install` to use the versions pinned in `.mise.toml`.
+3. Enable hooks once per checkout:
+
+   ```sh
+   git config core.hooksPath .githooks
+   ```
+
 4. Use the repository's existing package manager and lockfile. Do not introduce a second package manager.
 5. Copy `.env.example` to the appropriate local environment file when provided. Never commit the copy.
 
@@ -201,13 +169,9 @@ Keep pull requests focused and reviewable. Include screenshots or recordings for
 | Push to `staging`                | Release PR workflow                      |
 | Version tag such as `v1.2.3`     | Release workflow                         |
 
-The workflows use separate concurrency groups keyed by the commit under test. A newer run for the same commit cancels a duplicate event-triggered run, while newer commits cancel older runs and independent CI, Test, Security, and CodeQL workflows continue in parallel.
+The workflows use separate concurrency groups. A newer run for the same branch or pull request cancels its older run, while independent CI, test, security, and CodeQL workflows continue in parallel.
 
 Required checks are enforced by branch protection. Do not duplicate their checklists in the pull request description; document validation commands and results instead.
-
-### Release conventions
-
-Use Conventional Commits so the release automation can determine the next version: `fix:` produces a patch release, `feat:` produces a minor release, and `!` or `BREAKING CHANGE:` produces a major release. Add `Release-As: x.y.z` only when a deliberate version override is needed. The release workflow maintains the changelog and GitHub release after changes land on `main`; npm publication is opt-in through `.github/template.yml`.
 
 Security checks can be skipped when repository visibility or the GitHub plan does not support a feature. A skipped optional check must not be configured as a required status check.
 
