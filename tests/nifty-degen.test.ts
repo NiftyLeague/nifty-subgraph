@@ -181,6 +181,69 @@ describe('Describe entity assertions', () => {
 
     // Assert correct Background trait set (DEGEN 10K = Meta)
     assert.fieldEquals('TraitMap', newEntityId, 'background', '2')
+
+    // Assert Contract entity was created
+    assert.fieldEquals(
+      'Contract',
+      contractAddress.toHexString(),
+      'address',
+      contractAddress.toHexString()
+    )
+    assert.fieldEquals('Contract', contractAddress.toHexString(), 'totalSupply', '10000')
+  })
+
+  test('handleTransfer sets Legendary background for token in LEGGIES array', () => {
+    let from = initialOwner
+    let to = Address.fromString('0x0000000000000000000000000000000000000001')
+    let legendaryTokenId = BigInt.fromI32(150) // 150 is in LEGGIES
+
+    let args = [ethereum.Value.fromUnsignedBigInt(legendaryTokenId)]
+    let returnName = ethereum.Value.fromString('LegendaryNFT')
+    mockFunction(contractAddress, 'getName', 'getName(uint256):(string)', args, [returnName], false)
+
+    let tuple = new ethereum.Tuple()
+    for (let i = 1; i <= 22; i++) {
+      tuple.push(ethereum.Value.fromI32(i))
+    }
+    let characterTraits = ethereum.Value.fromTuple(tuple)
+    let fnSignature =
+      'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
+    mockFunction(contractAddress, 'getCharacterTraits', fnSignature, args, [characterTraits], false)
+
+    let event = createTransferEvent(from, to, legendaryTokenId)
+    event.address = contractAddress
+    handleTransfer(event)
+
+    let entityId = Bytes.fromBigInt(legendaryTokenId).toHexString()
+    // Legendary should set background = 3
+    assert.fieldEquals('TraitMap', entityId, 'background', '3')
+  })
+
+  test('handleTransfer sets Common background for unlisted token id', () => {
+    let from = initialOwner
+    let to = Address.fromString('0x0000000000000000000000000000000000000001')
+    let commonTokenId = BigInt.fromI32(50001) // Not in any rarity array
+
+    let args = [ethereum.Value.fromUnsignedBigInt(commonTokenId)]
+    let returnName = ethereum.Value.fromString('CommonNFT')
+    mockFunction(contractAddress, 'getName', 'getName(uint256):(string)', args, [returnName], false)
+
+    let tuple = new ethereum.Tuple()
+    for (let i = 1; i <= 22; i++) {
+      tuple.push(ethereum.Value.fromI32(i))
+    }
+    let characterTraits = ethereum.Value.fromTuple(tuple)
+    let fnSignature =
+      'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
+    mockFunction(contractAddress, 'getCharacterTraits', fnSignature, args, [characterTraits], false)
+
+    let event = createTransferEvent(from, to, commonTokenId)
+    event.address = contractAddress
+    handleTransfer(event)
+
+    let entityId = Bytes.fromBigInt(commonTokenId).toHexString()
+    // Unlisted token should set background = 0 (Common)
+    assert.fieldEquals('TraitMap', entityId, 'background', '0')
   })
 
   test('handleApproval records the owner, approved address, and token', () => {
@@ -217,6 +280,16 @@ describe('Describe entity assertions', () => {
     let id = event.transaction.hash.concatI32(event.logIndex.toI32()).toHexString()
     assert.fieldEquals('OwnershipTransferred', id, 'previousOwner', previousOwner.toHexString())
     assert.fieldEquals('OwnershipTransferred', id, 'newOwner', newOwner.toHexString())
+  })
+
+  test('handleNameUpdated does nothing when character does not exist', () => {
+    let unknownTokenId = BigInt.fromI32(99999)
+    let event = createNameUpdatedEvent(unknownTokenId, 'OldName', 'NewName')
+    handleNameUpdated(event)
+
+    // No entity should have been created for unknown token
+    let entityId = Bytes.fromBigInt(unknownTokenId).toHexString()
+    assert.notInStore('Character', entityId)
   })
 
   test('pause handlers record the acting account', () => {
