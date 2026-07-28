@@ -1,6 +1,6 @@
 {
   "name": "nifty-league",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-or-later",
   "version": "1.0.5",
   "scripts": {
     "codegen": "graph codegen",
@@ -27,7 +27,7 @@
     "test:graph": "graph test --version 0.6.0"
   },
   "devDependencies": {
-    "@assemblyscript/loader": "^0.28.19",
+    "@assemblyscript/loader": "0.28.19",
     "@eslint/js": "10.0.1",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
@@ -35,10 +35,10 @@
     "eslint": "10.8.0",
     "lint-staged": "17.2.0",
     "matchstick-as": "0.6.0",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
+    "typescript": "6.0.3",
     "typescript-eslint": "^8.65.0",
-    "wabt": "1.0.39",
-    "typescript": "5.9.3"
+    "wabt": "1.0.39"
   },
   "overrides": {
     "undici": "7.28.0",
