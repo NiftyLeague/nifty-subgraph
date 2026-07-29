@@ -3,4 +3,5 @@ abis
 coverage
 generated
 node_modules
+.code-foundry
 pnpm-lock.yaml
