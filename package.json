@@ -19,6 +19,8 @@
     "remove-local": "graph remove --node http://localhost:8020/ nifty-league-sepolia",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
     "test": "bun test bun-tests",
+    "test:unit": "bun test bun-tests",
+    "test:integration": "bun run test:graph",
     "test:coverage": "node scripts/check-coverage.mjs",
     "audit": "bash scripts/audit.sh",
     "dev": "graph create --node http://localhost:8020/ nifty-league-sepolia && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
