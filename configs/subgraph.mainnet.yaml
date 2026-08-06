@@ -1,6 +1,6 @@
 specVersion: 1.3.0
 description: NiftyDegen Mainnet NFTs from NiftyLeague
-repository: https://github.com/NiftyLeague/nifty-league-subgraph.git
+repository: https://github.com/NiftyLeague/nifty-subgraph.git
 indexerHints:
   prune: auto
 schema:

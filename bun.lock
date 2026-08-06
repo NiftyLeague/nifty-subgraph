@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "nifty-league",
+      "name": "nifty-subgraph",
       "devDependencies": {
         "@assemblyscript/loader": "0.28.20",
         "@eslint/js": "10.0.1",

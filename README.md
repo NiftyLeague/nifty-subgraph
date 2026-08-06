@@ -1,4 +1,4 @@
-# Nifty League Subgraph
+# Nifty Subgraph
 
 Subgraph indexing [NiftyDegen](https://niftyleague.com) NFTs across **mainnet** and **sepolia** — powering the NiftyLeague ecosystem on The Graph Network.
 
