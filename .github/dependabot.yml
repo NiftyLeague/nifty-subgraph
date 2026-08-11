@@ -24,6 +24,16 @@ updates:
       interval: weekly
       day: sunday
     open-pull-requests-limit: 99
+    ignore:
+      # assemblyscript is pinned to 0.19.x because matchstick-as 0.6.0 and the
+      # graph-cli asc toolchain break on >=0.20 (the asc binary was removed).
+      # See commit 8547945. Allow 0.19.x patches only.
+      - dependency-name: 'assemblyscript'
+        versions: ['>=0.20.0']
+      # typescript-eslint 8.x does not support TS 7.0 (lint hard-crashes).
+      # Re-enable when typescript-eslint supports TS >=7.1.
+      - dependency-name: 'typescript'
+        versions: ['>=7.0.0']
     groups:
       npm-dependencies:
         applies-to: version-updates
