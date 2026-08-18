@@ -8,7 +8,7 @@ import {
   test,
 } from 'matchstick-as/assembly/index'
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts'
-import { Character, Contract, Owner, TraitMap } from '../generated/schema'
+import { Character, Owner } from '../generated/schema'
 import {
   handleApproval,
   handleApprovalForAll,
@@ -345,13 +345,21 @@ describe('HandleTransfer edge cases (custom-mappings)', () => {
       tuple.push(ethereum.Value.fromI32(i))
     }
     let characterTraits = ethereum.Value.fromTuple(tuple)
-    let fnSignature = 'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
+    let fnSignature =
+      'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
     mockFunction(contractAddress, 'getCharacterTraits', fnSignature, args, [characterTraits], false)
 
     // Mock getName
     let nameArgs = [ethereum.Value.fromUnsignedBigInt(tokenId)]
     let returnName = ethereum.Value.fromString('MultiOwnerNFT')
-    mockFunction(contractAddress, 'getName', 'getName(uint256):(string)', nameArgs, [returnName], false)
+    mockFunction(
+      contractAddress,
+      'getName',
+      'getName(uint256):(string)',
+      nameArgs,
+      [returnName],
+      false
+    )
 
     // Create an owner with 3 characters
     let owner = new Owner(from)
