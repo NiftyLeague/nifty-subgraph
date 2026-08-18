@@ -8,7 +8,7 @@ import {
   test,
 } from 'matchstick-as/assembly/index'
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts'
-import { Character } from '../generated/schema'
+import { Character, Contract, Owner, TraitMap } from '../generated/schema'
 import {
   handleApproval,
   handleApprovalForAll,
@@ -303,5 +303,131 @@ describe('Describe entity assertions', () => {
     handleUnpaused(unpaused)
     let unpausedId = unpaused.transaction.hash.concatI32(unpaused.logIndex.toI32()).toHexString()
     assert.fieldEquals('Unpaused', unpausedId, 'account', account.toHexString())
+  })
+})
+
+describe('HandleTransfer edge cases (custom-mappings)', () => {
+  beforeAll(() => {
+    clearStore()
+    // Setup contract mocks
+    let returnSupply = ethereum.Value.fromSignedBigInt(totalSupply)
+    mockFunction(
+      contractAddress,
+      'totalSupply',
+      'totalSupply():(uint256)',
+      [],
+      [returnSupply],
+      false
+    )
+    let removedTraits = ethereum.Value.fromI32Array([1, 16, 33])
+    mockFunction(
+      contractAddress,
+      'getRemovedTraits',
+      'getRemovedTraits():(uint16[])',
+      [],
+      [removedTraits],
+      false
+    )
+  })
+
+  afterAll(() => {
+    clearStore()
+  })
+
+  test('handleTransfer decrements but does not zero out an owner with multiple characters', () => {
+    let from = Address.fromString('0x000000000000000000000000000000000000000a')
+    let to = Address.fromString('0x000000000000000000000000000000000000000b')
+
+    // Mock getCharacterTraits since a new character will be created
+    let args = [ethereum.Value.fromUnsignedBigInt(tokenId)]
+    let tuple = new ethereum.Tuple()
+    for (let i = 1; i <= 22; i++) {
+      tuple.push(ethereum.Value.fromI32(i))
+    }
+    let characterTraits = ethereum.Value.fromTuple(tuple)
+    let fnSignature = 'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
+    mockFunction(contractAddress, 'getCharacterTraits', fnSignature, args, [characterTraits], false)
+
+    // Mock getName
+    let nameArgs = [ethereum.Value.fromUnsignedBigInt(tokenId)]
+    let returnName = ethereum.Value.fromString('MultiOwnerNFT')
+    mockFunction(contractAddress, 'getName', 'getName(uint256):(string)', nameArgs, [returnName], false)
+
+    // Create an owner with 3 characters
+    let owner = new Owner(from)
+    owner.address = from
+    owner.createdAt = BigInt.fromI32(1)
+    owner.characterCount = 3
+    owner.save()
+
+    let event = createTransferEvent(from, to, tokenId)
+    event.address = contractAddress
+    handleTransfer(event)
+
+    assert.fieldEquals('Owner', from.toHexString(), 'characterCount', '2')
+    assert.fieldEquals('Owner', to.toHexString(), 'characterCount', '1')
+  })
+
+  test('handleTransfer updates ownership without creating a new character', () => {
+    let from = Address.fromString('0x000000000000000000000000000000000000000c')
+    let to = Address.fromString('0x000000000000000000000000000000000000000d')
+
+    // Create both owners
+    let previousOwner = new Owner(from)
+    previousOwner.address = from
+    previousOwner.createdAt = BigInt.fromI32(1)
+    previousOwner.characterCount = 1
+    previousOwner.save()
+
+    let newOwner = new Owner(to)
+    newOwner.address = to
+    newOwner.createdAt = BigInt.fromI32(1)
+    newOwner.characterCount = 0
+    newOwner.save()
+
+    // Create an existing character
+    let character = new Character(entityId)
+    character.tokenId = tokenId
+    character.owner = previousOwner.id
+    character.createdAt = BigInt.fromI32(1)
+    character.transactionHash = '0xabc'
+    character.traits = entityId
+    character.save()
+
+    let event = createTransferEvent(from, to, tokenId)
+    event.address = contractAddress
+    handleTransfer(event)
+
+    assert.fieldEquals('Character', entityId.toHexString(), 'owner', newOwner.id.toHexString())
+    assert.fieldEquals('Owner', from.toHexString(), 'characterCount', '0')
+    assert.fieldEquals('Owner', to.toHexString(), 'characterCount', '1')
+  })
+})
+
+describe('HandleNameUpdated edge cases (custom-mappings)', () => {
+  beforeAll(() => {
+    clearStore()
+  })
+
+  afterAll(() => {
+    clearStore()
+  })
+
+  test('handleNameUpdated appends previousName when nameHistory is null', () => {
+    let character = new Character(entityId)
+    character.tokenId = tokenId
+    character.owner = new Owner(Address.fromString('0x0000000000000000000000000000000000000001')).id
+    character.createdAt = BigInt.fromI32(1)
+    character.transactionHash = '0xabc'
+    character.traits = entityId
+    character.name = 'OldName'
+    character.nameHistory = null
+    character.save()
+
+    let event = createNameUpdatedEvent(tokenId, 'OldName', 'NewName')
+    handleNameUpdated(event)
+
+    assert.fieldEquals('Character', entityId.toHexString(), 'name', 'NewName')
+    assert.fieldEquals('Character', entityId.toHexString(), 'nameHistory', '[OldName]')
   })
 })
