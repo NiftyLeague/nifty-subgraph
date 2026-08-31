@@ -39,7 +39,7 @@
     "matchstick-as": "0.6.0",
     "prettier": "^3.9.6",
     "typescript": "6.0.3",
-    "typescript-eslint": "^8.67.0",
+    "typescript-eslint": "^8.68.0",
     "wabt": "1.0.39"
   },
   "overrides": {
