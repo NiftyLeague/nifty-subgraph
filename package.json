@@ -33,7 +33,7 @@
     "@eslint/js": "10.0.1",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
-    "assemblyscript": "0.19.23",
+    "assemblyscript": "0.28.20",
     "eslint": "10.9.1",
     "lint-staged": "17.4.1",
     "matchstick-as": "0.6.0",
@@ -52,7 +52,7 @@
     "ejs": "3.1.10",
     "semver": "7.8.5",
     "uuid": "11.1.1",
-    "assemblyscript": "0.19.23"
+    "assemblyscript": "0.28.20"
   },
   "packageManager": "bun@1.4.0",
   "engines": {
