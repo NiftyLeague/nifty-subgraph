@@ -11,7 +11,8 @@ for (const stream of [child.stdout, child.stderr]) {
   stream.on('data', (chunk) => {
     const text = chunk.toString()
     output += text
-    stream === child.stdout ? process.stdout.write(text) : process.stderr.write(text)
+    if (stream === child.stdout) process.stdout.write(text)
+    else process.stderr.write(text)
   })
 }
 
@@ -24,6 +25,7 @@ if (exitCode !== 0) {
   process.exit(exitCode ?? 1)
 }
 
+// oxlint-disable-next-line no-control-regex -- strips ANSI color escapes from test output
 const plainOutput = output.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, '')
 const globalMatches = [...plainOutput.matchAll(/Global test coverage:\s*([\d.]+)%/gi)]
 const coverageMatches = [...plainOutput.matchAll(/Test coverage:\s*([\d.]+)%/gi)]

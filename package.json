@@ -1,7 +1,7 @@
 {
   "name": "nifty-subgraph",
-  "license": "Apache-2.0",
   "version": "1.0.0",
+  "license": "Apache-2.0",
   "scripts": {
     "codegen": "graph codegen",
     "codegen:mainnet": "graph codegen configs/subgraph.mainnet.yaml",
@@ -9,9 +9,9 @@
     "build": "graph build",
     "build:mainnet": "graph build configs/subgraph.mainnet.yaml",
     "build:sepolia": "graph build configs/subgraph.sepolia.yaml",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "eslint . --max-warnings=0",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint",
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia",
     "deploy:mainnet": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia configs/subgraph.mainnet.yaml",
     "deploy:sepolia": "graph deploy --node https://api.studio.thegraph.com/deploy/ nifty-league-sepolia configs/subgraph.sepolia.yaml",
@@ -30,32 +30,30 @@
   },
   "devDependencies": {
     "@assemblyscript/loader": "0.28.20",
-    "@eslint/js": "10.0.1",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
     "assemblyscript": "0.19.23",
-    "eslint": "10.9.1",
     "lint-staged": "17.4.1",
     "matchstick-as": "0.6.0",
-    "prettier": "^3.9.6",
+    "oxfmt": "^0.66.0",
+    "oxlint": "^1.81.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "^8.68.0",
     "wabt": "1.0.39"
   },
   "overrides": {
-    "undici": "7.29.0",
-    "immutable": "5.1.9",
-    "glob": "11.1.0",
-    "yaml": "2.9.0",
-    "js-yaml": "4.3.1",
+    "assemblyscript": "0.19.23",
     "cross-spawn": "7.0.6",
     "ejs": "3.1.10",
+    "glob": "11.1.0",
+    "immutable": "5.1.9",
+    "js-yaml": "4.3.1",
     "semver": "7.8.5",
+    "undici": "7.29.0",
     "uuid": "11.1.1",
-    "assemblyscript": "0.19.23"
+    "yaml": "2.9.0"
   },
-  "packageManager": "bun@1.4.0",
   "engines": {
     "node": "24.18.0"
-  }
+  },
+  "packageManager": "bun@1.4.0"
 }
