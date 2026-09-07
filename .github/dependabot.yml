@@ -30,24 +30,9 @@ updates:
         patterns: ['*']
     ignore:
       # TypeScript 7 cannot resolve node: builtins in this toolchain
-      # (verified); revisit when the TS/eslint toolchain supports TS 7.
+      # (verified); revisit when the TS toolchain supports TS 7.
       - dependency-name: 'typescript'
         versions: ['>=7.0.0']
       # Held with TypeScript 5.9 above.
       - dependency-name: '@types/node'
         versions: ['>=23']
-      # assemblyscript 0.28+ restructures CLI (removes cli/asc); @graphprotocol/graph-cli@0.98.1 hard-imports assemblyscript/cli/asc
-      # and fails ModuleLoadError. Even latest graph-cli alphas still pin 0.19.23. Ignore until toolchain supports new major.
-      - dependency-name: 'assemblyscript'
-        versions: ['>=0.20']
-  - package-ecosystem: pip
-    directory: /
-    target-branch: main
-    schedule:
-      interval: weekly
-      day: sunday
-    open-pull-requests-limit: 99
-    groups:
-      python-dependencies:
-        applies-to: version-updates
-        patterns: ['*']
