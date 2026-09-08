@@ -98,6 +98,9 @@ Tests are in `bun-tests/` and use `bun:test`. Legacy matchstick tests are in `te
 # Reproducible local build, mapping, indexing-fixture, and dependency budgets
 bun run performance
 
+# The same enforcing command used by Code Foundry's performance job
+bun run performance:check
+
 # Add live query latency and index-progress sampling
 SUBGRAPH_PERFORMANCE_URL=https://example.invalid/graphql \
 SUBGRAPH_PERFORMANCE_TOKEN=optional-token \
