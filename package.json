@@ -23,6 +23,7 @@
     "test:integration": "bun run test:graph",
     "test:coverage": "node scripts/check-coverage.mjs",
     "performance": "bun run scripts/performance-audit.ts",
+    "performance:check": "bun run scripts/performance-audit.ts",
     "performance:live": "bun run scripts/performance-audit.ts --live",
     "audit": "bash scripts/audit.sh",
     "dev": "graph create --node http://localhost:8020/ nifty-league-sepolia && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",

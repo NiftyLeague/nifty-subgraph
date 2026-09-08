@@ -88,4 +88,4 @@ A release candidate is validated only when all applicable gates below are record
 11. `bun run audit`
 12. `bun run performance:live` against the candidate deployment, followed by a source-chain head comparison
 
-The local performance gate is suitable for pull requests. The live gate belongs after a candidate deployment and before promotion. A skipped live check is not a pass.
+Code Foundry runs the local gate as `Validation / Test / Performance` on pull requests. The live gate belongs after a candidate deployment and before promotion. A skipped live check is not a pass.
