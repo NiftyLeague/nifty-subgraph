@@ -219,6 +219,33 @@ describe('Describe entity assertions', () => {
     assert.fieldEquals('TraitMap', legendaryEntityId, 'background', '3')
   })
 
+  test('handleTransfer sets Rare background for token in RARES array', () => {
+    let from = initialOwner
+    let to = Address.fromString('0x0000000000000000000000000000000000000001')
+    let rareTokenId = BigInt.fromI32(32) // 32 is in RARES
+
+    let args = [ethereum.Value.fromUnsignedBigInt(rareTokenId)]
+    let returnName = ethereum.Value.fromString('RareNFT')
+    mockFunction(contractAddress, 'getName', 'getName(uint256):(string)', args, [returnName], false)
+
+    let tuple = new ethereum.Tuple()
+    for (let i = 1; i <= 22; i++) {
+      tuple.push(ethereum.Value.fromI32(i))
+    }
+    let characterTraits = ethereum.Value.fromTuple(tuple)
+    let fnSignature =
+      'getCharacterTraits(uint256):((uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16,uint16))'
+    mockFunction(contractAddress, 'getCharacterTraits', fnSignature, args, [characterTraits], false)
+
+    let event = createTransferEvent(from, to, rareTokenId)
+    event.address = contractAddress
+    handleTransfer(event)
+
+    let rareEntityId = Bytes.fromBigInt(rareTokenId).toHexString()
+    // Rare should set background = 1
+    assert.fieldEquals('TraitMap', rareEntityId, 'background', '1')
+  })
+
   test('handleTransfer sets Common background for unlisted token id', () => {
     let from = initialOwner
     let to = Address.fromString('0x0000000000000000000000000000000000000001')
