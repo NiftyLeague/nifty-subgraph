@@ -34,7 +34,7 @@
     "@assemblyscript/loader": "0.28.20",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
-    "assemblyscript": "0.28.20",
+    "assemblyscript": "0.19.23",
     "lint-staged": "17.4.1",
     "matchstick-as": "0.6.0",
     "oxfmt": "^0.66.0",
@@ -43,7 +43,7 @@
     "wabt": "1.0.39"
   },
   "overrides": {
-    "assemblyscript": "0.28.20",
+    "assemblyscript": "0.19.23",
     "cross-spawn": "7.0.6",
     "ejs": "3.1.10",
     "glob": "11.1.0",
