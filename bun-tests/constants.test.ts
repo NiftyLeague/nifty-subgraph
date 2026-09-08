@@ -20,7 +20,7 @@ describe('constants — rarity tables', () => {
       ['METAS', METAS],
       ['RARES', RARES],
     ] as const) {
-      const sorted = [...table].sort((a, b) => a - b)
+      const sorted = table.toSorted((a, b) => a - b)
       expect(table, `${label} should be sorted ascending`).toEqual(sorted)
     }
   })
