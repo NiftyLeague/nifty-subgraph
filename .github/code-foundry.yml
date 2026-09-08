@@ -4,7 +4,9 @@ languages: typescript
 features: all
 package_manager: bun
 runtime_repository: 0xPlayerOne/code-foundry
-runtime_ref: v1.5.1
+runtime_ref: v1.9.0
+performance_runner: ubuntu-latest
+performance: true
 runner: ubuntu-latest
 unit_runner: ubuntu-slim
 ci_runner: ubuntu-latest
@@ -38,3 +40,6 @@ codeql_rust_max_parallel: 1
 release_merge_strategy: rebase
 opencode_security_model:
 staging_validation_mode: fast
+performance_command:
+performance_profile:
+performance_budget_file: performance-package-budgets.json
