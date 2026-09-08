@@ -92,6 +92,21 @@ bun run coverage
 
 Tests are in `bun-tests/` and use `bun:test`. Legacy matchstick tests are in `tests/`.
 
+## Performance regression audit
+
+```bash
+# Reproducible local build, mapping, indexing-fixture, and dependency budgets
+bun run performance
+
+# Add live query latency and index-progress sampling
+SUBGRAPH_PERFORMANCE_URL=https://example.invalid/graphql \
+SUBGRAPH_PERFORMANCE_TOKEN=optional-token \
+SUBGRAPH_CHAIN_RPC_URL=https://ethereum-rpc.example \
+bun run performance:live
+```
+
+See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for the M0 baseline, budget rationale, live-query fixtures, and release gates.
+
 ## CI/CD
 
 GitHub Actions workflow (`.github/workflows/ci.yml`):

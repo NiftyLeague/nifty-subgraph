@@ -39,7 +39,7 @@ describe('getBackground (BigInt)', () => {
   it('never returns an unknown tier for BigInt ids across the full 0..9999 range', () => {
     const seen = new Set<string>()
     for (let i = 0; i < 10000; i++) seen.add(getBackground(BigInt(i)).type)
-    expect([...seen].sort()).toEqual(['Common', 'Legendary', 'Meta', 'Rare'])
+    expect([...seen].toSorted()).toEqual(['Common', 'Legendary', 'Meta', 'Rare'])
   })
 
   it('uses the correct tier id for each rarity tier', () => {

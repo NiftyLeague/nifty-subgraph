@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "fixtureEventCount": 1000,
+  "local": {
+    "codegenMs": 5000,
+    "buildMsPerNetwork": 10000,
+    "matchstickSuiteMs": 15000,
+    "approvalFixtureMinEventsPerSecond": 2000,
+    "backgroundClassifierMinOperationsPerSecond": 3000000,
+    "wasmBytesPerNetwork": 100000,
+    "installedDependencyBytes": 2147483648,
+    "resolvedDependencyEntries": 700
+  },
+  "live": {
+    "queryP95Ms": 1500,
+    "queryMaxMs": 3000,
+    "sampleCount": 5,
+    "indexingSampleMs": 15000,
+    "maxBlockLag": 25
+  }
+}

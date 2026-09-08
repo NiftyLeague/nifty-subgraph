@@ -6,10 +6,25 @@ import { LEGGIES, METAS, RARES } from './constants'
 
 export type BackgroundType = 'Legendary' | 'Meta' | 'Rare' | 'Common'
 
+export function includesSorted(values: number[], target: number): boolean {
+  let low = 0
+  let high = values.length - 1
+
+  while (low <= high) {
+    const middle = low + ((high - low) >> 1)
+    const value = values[middle]
+    if (value === target) return true
+    if (value < target) low = middle + 1
+    else high = middle - 1
+  }
+
+  return false
+}
+
 export function classifyBackground(tokenId: number): BackgroundType {
-  if (LEGGIES.indexOf(tokenId) !== -1) return 'Legendary'
-  if (METAS.indexOf(tokenId) !== -1) return 'Meta'
-  if (RARES.indexOf(tokenId) !== -1) return 'Rare'
+  if (includesSorted(LEGGIES, tokenId)) return 'Legendary'
+  if (includesSorted(METAS, tokenId)) return 'Meta'
+  if (includesSorted(RARES, tokenId)) return 'Rare'
   return 'Common'
 }
 
