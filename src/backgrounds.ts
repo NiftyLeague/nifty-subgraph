@@ -14,12 +14,28 @@ export class Background {
   }
 }
 
+export function includesSorted(values: number[], target: number): boolean {
+  let low = 0
+  let high = values.length - 1
+
+  while (low <= high) {
+    let middle = low + ((high - low) >> 1)
+    let value = values[middle]
+    if (value === target) return true
+    if (value < target) low = middle + 1
+    else high = middle - 1
+  }
+
+  return false
+}
+
 export function getBackground(tokenId: BigInt): Background {
-  if (LEGGIES.includes(tokenId.toI32())) {
+  let id = tokenId.toI32()
+  if (includesSorted(LEGGIES, id)) {
     return new Background(3)
-  } else if (METAS.includes(tokenId.toI32())) {
+  } else if (includesSorted(METAS, id)) {
     return new Background(2)
-  } else if (RARES.includes(tokenId.toI32())) {
+  } else if (includesSorted(RARES, id)) {
     return new Background(1)
   }
   return new Background(0)

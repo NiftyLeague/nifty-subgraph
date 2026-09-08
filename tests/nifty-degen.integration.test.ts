@@ -214,9 +214,9 @@ describe('Describe entity assertions', () => {
     event.address = contractAddress
     handleTransfer(event)
 
-    let entityId = Bytes.fromBigInt(legendaryTokenId).toHexString()
+    let legendaryEntityId = Bytes.fromBigInt(legendaryTokenId).toHexString()
     // Legendary should set background = 3
-    assert.fieldEquals('TraitMap', entityId, 'background', '3')
+    assert.fieldEquals('TraitMap', legendaryEntityId, 'background', '3')
   })
 
   test('handleTransfer sets Common background for unlisted token id', () => {
@@ -241,9 +241,9 @@ describe('Describe entity assertions', () => {
     event.address = contractAddress
     handleTransfer(event)
 
-    let entityId = Bytes.fromBigInt(commonTokenId).toHexString()
+    let commonEntityId = Bytes.fromBigInt(commonTokenId).toHexString()
     // Unlisted token should set background = 0 (Common)
-    assert.fieldEquals('TraitMap', entityId, 'background', '0')
+    assert.fieldEquals('TraitMap', commonEntityId, 'background', '0')
   })
 
   test('handleApproval records the owner, approved address, and token', () => {
@@ -288,8 +288,8 @@ describe('Describe entity assertions', () => {
     handleNameUpdated(event)
 
     // No entity should have been created for unknown token
-    let entityId = Bytes.fromBigInt(unknownTokenId).toHexString()
-    assert.notInStore('Character', entityId)
+    let unknownEntityId = Bytes.fromBigInt(unknownTokenId).toHexString()
+    assert.notInStore('Character', unknownEntityId)
   })
 
   test('pause handlers record the acting account', () => {
@@ -437,5 +437,28 @@ describe('HandleNameUpdated edge cases (custom-mappings)', () => {
 
     assert.fieldEquals('Character', entityId.toHexString(), 'name', 'NewName')
     assert.fieldEquals('Character', entityId.toHexString(), 'nameHistory', '[OldName]')
+  })
+})
+
+describe('Performance regression fixture', () => {
+  beforeAll(() => {
+    clearStore()
+  })
+
+  afterAll(() => {
+    clearStore()
+  })
+
+  test('indexes 1000 representative approval events', () => {
+    let owner = Address.fromString('0x0000000000000000000000000000000000000050')
+    let approved = Address.fromString('0x0000000000000000000000000000000000000051')
+
+    for (let index = 0; index < 1000; index++) {
+      let event = createApprovalEvent(owner, approved, BigInt.fromI32(index))
+      event.logIndex = BigInt.fromI32(index)
+      handleApproval(event)
+    }
+
+    assert.entityCount('Approval', 1000)
   })
 })

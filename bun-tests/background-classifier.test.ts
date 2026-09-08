@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'bun:test'
 import { LEGGIES, METAS, RARES } from '../src/constants'
-import { classifyBackground, createBackground } from '../src/background-classifier'
+import { classifyBackground, createBackground, includesSorted } from '../src/background-classifier'
 
 describe('background rarity tables', () => {
   it('exposes non-empty, sorted, deduplicated rarity arrays', () => {
     for (const table of [LEGGIES, METAS, RARES]) {
       expect(table.length).toBeGreaterThan(0)
-      const sorted = [...table].sort((a, b) => a - b)
+      const sorted = table.toSorted((a, b) => a - b)
       expect(table).toEqual(sorted)
       expect(new Set(table).size).toBe(table.length)
     }
@@ -19,6 +19,19 @@ describe('background rarity tables', () => {
 })
 
 describe('classifyBackground', () => {
+  it('keeps binary-search classification equivalent to the rarity tables', () => {
+    for (let id = 0; id <= 10000; id++) {
+      const expected = LEGGIES.includes(id)
+        ? 'Legendary'
+        : METAS.includes(id)
+          ? 'Meta'
+          : RARES.includes(id)
+            ? 'Rare'
+            : 'Common'
+      expect(classifyBackground(id)).toBe(expected)
+    }
+  })
+
   it('classifies a legendary token id', () => {
     expect(classifyBackground(LEGGIES[0])).toBe('Legendary')
   })
@@ -40,6 +53,16 @@ describe('classifyBackground', () => {
     const seen = new Set<string>()
     for (let id = 0; id < 10000; id++) seen.add(classifyBackground(id))
     expect([...seen]).toEqual(expect.arrayContaining(['Legendary', 'Meta', 'Rare', 'Common']))
+  })
+})
+
+describe('includesSorted', () => {
+  it('handles empty, boundary, present, and absent values', () => {
+    expect(includesSorted([], 1)).toBe(false)
+    expect(includesSorted([2, 4, 6, 8], 2)).toBe(true)
+    expect(includesSorted([2, 4, 6, 8], 8)).toBe(true)
+    expect(includesSorted([2, 4, 6, 8], 5)).toBe(false)
+    expect(includesSorted([2, 4, 6, 8], 9)).toBe(false)
   })
 })
 
@@ -68,6 +91,6 @@ describe('createBackground', () => {
   it('never returns an unknown tier', () => {
     const seen = new Set<string>()
     for (let id = 0; id < 10000; id++) seen.add(createBackground(id).type)
-    expect([...seen].sort()).toEqual(['Common', 'Legendary', 'Meta', 'Rare'])
+    expect([...seen].toSorted()).toEqual(['Common', 'Legendary', 'Meta', 'Rare'])
   })
 })

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-08T03:20:35.057Z",
+  "environment": {
+    "platform": "darwin 25.6.0",
+    "architecture": "arm64",
+    "cpu": "Apple M2 Max",
+    "logicalCpuCount": 12,
+    "totalMemoryBytes": 68719476736,
+    "bun": "1.4.0",
+    "node": "v24.18.0"
+  },
+  "local": {
+    "codegenMs": 768.6,
+    "builds": {
+      "mainnet": {
+        "durationMs": 2075.9,
+        "wasmBytes": 62420,
+        "wasmSha256": "f8045f1b77ae578a7fd96fe9d3b11c777931cfd7a2402c94b8401d28a9252cc2"
+      },
+      "sepolia": {
+        "durationMs": 2081.87,
+        "wasmBytes": 62420,
+        "wasmSha256": "f8045f1b77ae578a7fd96fe9d3b11c777931cfd7a2402c94b8401d28a9252cc2"
+      },
+      "identicalWasm": true
+    },
+    "mappingRuntime": {
+      "backgroundClassifier": {
+        "operations": 1000000,
+        "durationMs": 33.87,
+        "operationsPerSecond": 29528321.68,
+        "preOptimizationOperationsPerSecond": 6625235.01
+      }
+    },
+    "indexingFixture": {
+      "event": "Approval",
+      "events": 1000,
+      "durationMs": 281.476,
+      "eventsPerSecond": 3552.7,
+      "matchstickSuiteMs": 2344.5
+    },
+    "dependencies": {
+      "installedBytes": 1625153536,
+      "lockfileBytes": 117462,
+      "resolvedEntries": 535
+    }
+  },
+  "live": {
+    "configured": true,
+    "status": "passed",
+    "legacyEndpointStatus": "deployment u7093/s53846/latest does not exist",
+    "queries": [
+      {
+        "name": "metadata",
+        "p50Ms": 105.53,
+        "p95Ms": 107.75,
+        "maxMs": 107.75
+      },
+      {
+        "name": "character-page",
+        "p50Ms": 112.67,
+        "p95Ms": 130.56,
+        "maxMs": 130.56
+      },
+      {
+        "name": "owner-leaderboard",
+        "p50Ms": 109.3,
+        "p95Ms": 125.46,
+        "maxMs": 125.46
+      }
+    ],
+    "indexing": {
+      "initialBlock": 25929987,
+      "finalBlock": 25929989,
+      "initialChainHead": 25929987,
+      "finalChainHead": 25929989,
+      "finalBlockLag": 0,
+      "sampledSeconds": 15,
+      "indexedBlocksPerSecond": 0.13,
+      "hasIndexingErrors": false
+    }
+  },
+  "localBudgetsPassed": true,
+  "liveBudgetsPassed": true
+}

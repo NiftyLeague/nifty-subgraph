@@ -1,0 +1,14 @@
+[
+  {
+    "name": "metadata",
+    "query": "query PerformanceMetadata { _meta { block { number hash timestamp } deployment hasIndexingErrors } }"
+  },
+  {
+    "name": "character-page",
+    "query": "query PerformanceCharacters { characters(first: 25, orderBy: tokenId, orderDirection: asc) { id tokenId owner { id characterCount } traits { tribe background } } }"
+  },
+  {
+    "name": "owner-leaderboard",
+    "query": "query PerformanceOwners { owners(first: 25, orderBy: characterCount, orderDirection: desc) { id characterCount characters(first: 5) { id tokenId } } }"
+  }
+]
