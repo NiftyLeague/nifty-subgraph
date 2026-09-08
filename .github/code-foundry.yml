@@ -24,7 +24,7 @@ release_type: node
 npm_publish: false
 license: apache-2.0
 git_workflow: direct
-merge_strategy: rebase
+merge_strategy: squash
 codeql: auto
 dependency_review: auto
 toolchain: auto
@@ -37,7 +37,7 @@ custom_workflows: preserve
 codeql_rust_shards: '["all"]'
 codeql_rust_threads: 1
 codeql_rust_max_parallel: 1
-release_merge_strategy: rebase
+release_merge_strategy: squash
 opencode_security_model:
 staging_validation_mode: fast
 performance_command:
