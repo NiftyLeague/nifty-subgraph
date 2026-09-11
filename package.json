@@ -29,7 +29,7 @@
     "dev": "graph create --node http://localhost:8020/ nifty-league-sepolia && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
     "start": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nifty-league-sepolia",
     "type:check": "graph build",
-    "test:graph": "graph test --version 0.6.0"
+    "test:graph": "sh -c \"ldconfig -p | grep -q libpq.so.5 || sudo apt-get install -y -qq libpq5; graph test --version 0.6.0\""
   },
   "devDependencies": {
     "@assemblyscript/loader": "0.28.20",
