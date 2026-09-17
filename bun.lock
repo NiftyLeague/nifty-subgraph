@@ -13,7 +13,7 @@
         "matchstick-as": "0.6.0",
         "oxfmt": "^0.68.0",
         "oxlint": "^1.83.0",
-        "typescript": "6.0.3",
+        "typescript": "^6.0.3",
         "wabt": "1.0.39",
       },
     },
