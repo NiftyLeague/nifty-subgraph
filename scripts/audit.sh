@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Dependabot's bun updater only parses lockfileVersion 1. Bun 1.4 writes version 2
+# for a plain `bun install` and version 3 when scoped `parent>child` overrides are
+# present, and either one silently disables the weekly dependency lane, so the
+# committed lockfile is held at version 1. See the toolchain notes in AGENTS.md.
+LOCKFILE_VERSION=$(sed -n 's/.*"lockfileVersion": *\([0-9][0-9]*\).*/\1/p' bun.lock | head -1)
+if [ "$LOCKFILE_VERSION" != "1" ]; then
+  echo "❌ bun.lock declares lockfileVersion ${LOCKFILE_VERSION:-none}; Dependabot only parses version 1."
+  echo "   Set the field back to 1 and confirm with 'bun install --frozen-lockfile'."
+  exit 1
+fi
+
 # Allowed ids are known-unfixable transitive advisories in the dev-only Graph CLI
 # dependency tree. They are not shipped by the deployed subgraph.
 #
