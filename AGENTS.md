@@ -178,6 +178,7 @@ This repository uses the `direct` workflow. Topic pull requests target `main`.
 - Keep dependency additions narrowly scoped and explain security, licensing, and runtime impact.
 
 <!-- /code-foundry-managed: toolchain-and-dependencies -->
+
 - Keep `bun.lock` at `"lockfileVersion": 1`. Dependabot's bun updater only parses
   version 1, so the version 2 that `bun install` writes with the pinned Bun 1.4,
   and the version 3 it writes for scoped `parent>child` overrides, both silently
