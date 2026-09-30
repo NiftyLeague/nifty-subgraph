@@ -71,6 +71,46 @@ bun run performance:live
 
 The live mode warms each query, records five samples for metadata, a 25-character relation page, and a 25-owner leaderboard page, then enforces p95 <= 1,500 ms and max <= 3,000 ms. It samples `_meta.block.number` and the source-chain head over 15 seconds, requires no indexing errors, and permits at most 25 blocks of lag. A zero block delta is informative but not automatically a failure because the source chain or deployment can legitimately be idle.
 
+The frontend endpoint above is dead and must not be restored by editing this document. The current production deployment is resolved from the `app` project's production environment, and its identifier and access token are deliberately absent from the repository. Record the resolved query endpoint in the `SUBGRAPH_PERFORMANCE_URL` repository variable instead; never in a tracked file, a workflow, or an issue.
+
+## Deployment health monitoring
+
+`Subgraph Deployment Health` (`.github/workflows/subgraph-health.yml`) runs every six hours and on manual dispatch. It runs the credential-safe live audit against the configured deployment, renders the result with `scripts/health-summary.mjs`, and reports indexing errors, the indexed block range, the source-chain head, and block lag.
+
+Repository configuration, all of it outside the repository:
+
+| Setting                      | Kind                | Required | Purpose                                       |
+| ---------------------------- | ------------------- | -------- | --------------------------------------------- |
+| `SUBGRAPH_PERFORMANCE_URL`   | Repository variable | Yes      | GraphQL endpoint of the deployment to probe   |
+| `SUBGRAPH_CHAIN_RPC_URL`     | Repository variable | Yes      | Source-chain JSON-RPC used for the lag sample |
+| `SUBGRAPH_PERFORMANCE_TOKEN` | Repository secret   | No       | Bearer token when the endpoint requires one   |
+
+The same three names are listed in `.env.example` for local runs. With the two required settings absent, the workflow reports that the probe is not configured and does not raise an incident.
+
+The probe is credential safe by construction. The audit report records query timings, block numbers, and whether a bearer token was used, never the endpoint or the token; the workflow captures the audit's own error text instead of echoing it, because a failed fetch would otherwise print the endpoint, and this repository is public. The verdict comes from the `live.*` checks only, so a slow local build budget on the runner cannot be reported as a deployment incident.
+
+Results are tracked through one issue labeled `health-check`: the first degraded run opens it, later degraded runs comment on it, and the first healthy run closes it with the recovering summary. The JSON report is kept as a seven-day artifact for diagnosis. Reproduce a failure locally with `bun run performance:live` and the variables above rather than from the run log.
+
+## Staging
+
+Staging is the local graph-node stack in `docker-compose.yml`, which is the deployment the `dev`, `create-local`, and `deploy-local` scripts target. Bring it up with an Ethereum RPC reachable at `host.docker.internal:8545`:
+
+```bash
+docker compose up -d
+bun run dev
+```
+
+| Endpoint                                                    | Purpose                                     |
+| ----------------------------------------------------------- | ------------------------------------------- |
+| `http://localhost:8000/`                                    | GraphiQL                                    |
+| `http://localhost:8000/subgraphs/name/nifty-league-sepolia` | Deployed subgraph queries                   |
+| `http://localhost:8020/`                                    | graph-node admin API used by `graph deploy` |
+| `ws://localhost:8001/subgraphs/name/nifty-league-sepolia`   | Subscriptions                               |
+| `http://localhost:5001`                                     | IPFS API                                    |
+| `postgresql://localhost:5432/graph-node`                    | graph-node database                         |
+
+To monitor a shared staging deployment instead of a laptop, set `SUBGRAPH_PERFORMANCE_URL` to its query endpoint and `SUBGRAPH_CHAIN_RPC_URL` to its source-chain RPC; the same scheduled probe then covers staging. The ports above are refused unless the compose stack is running, which is why a scheduled run cannot see a laptop-local staging node.
+
 ## Release validation requirements
 
 A release candidate is validated only when all applicable gates below are recorded:
