@@ -40,7 +40,7 @@
     "matchstick-as": "0.6.0",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.85.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "wabt": "1.0.39"
   },
   "overrides": {

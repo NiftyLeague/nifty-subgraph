@@ -36,12 +36,6 @@ updates:
       # output is byte-identical either way, but the exact pin is what makes
       # the compiled wasm reproducible, so hold it.
       - dependency-name: 'assemblyscript'
-      # TypeScript 7 (the native compiler) is supported by the oxlint/oxfmt
-      # toolchain; the tsconfig must use NodeNext or bundler resolution since
-      # legacy node10 resolution was removed. Held with 5.9 until each
-      # repository's tsconfig is verified on 7.
-      - dependency-name: 'typescript'
-        versions: ['>=7.0.0']
-      # Held with TypeScript 5.9 above.
+      # Held pending a separate types review of the @types/node surface.
       - dependency-name: '@types/node'
         versions: ['>=23']
