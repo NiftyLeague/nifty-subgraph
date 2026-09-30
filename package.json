@@ -45,6 +45,7 @@
   },
   "overrides": {
     "cross-spawn": "7.0.6",
+    "decompress": "npm:@xhmikosr/decompress@^11.1.4",
     "glob": "11.1.0",
     "immutable": "5.1.8",
     "js-yaml": "4.3.2",
