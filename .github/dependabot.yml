@@ -29,13 +29,12 @@ updates:
         applies-to: version-updates
         patterns: ['*']
     ignore:
-      # graph-cli 0.98.1 pins assemblyscript to 0.19.23 exactly, and bun
-      # resolves a single hoisted assemblyscript copy. A devDependency bump
-      # therefore does not just move this project's own entry, it silently
-      # re-points the compiler graph-cli itself builds with. Today's build
-      # output is byte-identical either way, but the exact pin is what makes
-      # the compiled wasm reproducible, so hold it.
-      - dependency-name: 'assemblyscript'
-      # Held pending a separate types review of the @types/node surface.
+      # TypeScript 7 (the native compiler) is supported by the oxlint/oxfmt
+      # toolchain; the tsconfig must use NodeNext or bundler resolution since
+      # legacy node10 resolution was removed. Held with 5.9 until each
+      # repository's tsconfig is verified on 7.
+      - dependency-name: 'typescript'
+        versions: ['>=7.0.0']
+      # Held with TypeScript 5.9 above.
       - dependency-name: '@types/node'
         versions: ['>=23']
