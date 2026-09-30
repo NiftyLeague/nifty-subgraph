@@ -144,6 +144,13 @@ This repository uses the `direct` workflow. Topic pull requests target `main`.
 - Use Cargo commands and the committed Cargo lockfile for Rust projects.
 - Do not mix package managers or regenerate lockfiles as a side effect.
 - Keep dependency additions narrowly scoped and explain security, licensing, and runtime impact.
+- Keep `bun.lock` at `"lockfileVersion": 1`. Dependabot's bun updater only parses
+  version 1, so the version 2 that `bun install` writes with the pinned Bun 1.4,
+  and the version 3 it writes for scoped `parent>child` overrides, both silently
+  break the weekly dependency lane. After an install that rewrites the lockfile,
+  set the field back to 1 and confirm `bun install --frozen-lockfile` still
+  reports no changes. Prefer flat `overrides` entries over scoped ones for the
+  same reason. `bun run audit` fails on a wrong version.
 
 ## Validation
 
