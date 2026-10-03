@@ -14,3 +14,9 @@ GHSA-p92q-9vqr-4j8v
 GHSA-pf86-5x62-jrwf
 GHSA-pjwm-pj3p-43mv
 GHSA-pmwg-cvhr-8vh7
+
+# braces advisory (GHSA-vfj7-8cjw-p6xm, high): no patched release exists as
+# of 2026-10-03 - 3.0.3 is the newest npm version and the advisory's patched
+# field is null. Dev-tooling transitive (graph-cli tooling chain) with a
+# build-time stack-exhaustion scenario only; revisit when >3.0.3 publishes.
+GHSA-vfj7-8cjw-p6xm
