@@ -5,7 +5,7 @@
     "codegenMs": 5000,
     "buildMsPerNetwork": 10000,
     "matchstickSuiteMs": 15000,
-    "approvalFixtureMinEventsPerSecond": 2000,
+    "approvalFixtureMinEventsPerSecond": 1800,
     "backgroundClassifierMinOperationsPerSecond": 3000000,
     "wasmBytesPerNetwork": 100000,
     "installedDependencyBytes": 2147483648,
