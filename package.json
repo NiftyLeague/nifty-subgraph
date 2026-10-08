@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "scripts": {
+    "postinstall": "node scripts/asc-compat.mjs",
     "codegen": "graph codegen",
     "codegen:mainnet": "graph codegen configs/subgraph.mainnet.yaml",
     "codegen:sepolia": "graph codegen configs/subgraph.sepolia.yaml",
@@ -35,7 +36,7 @@
     "@assemblyscript/loader": "0.28.20",
     "@graphprotocol/graph-cli": "0.98.1",
     "@graphprotocol/graph-ts": "0.38.2",
-    "assemblyscript": "0.19.23",
+    "assemblyscript": "0.28.20",
     "lint-staged": "17.6.0",
     "matchstick-as": "0.6.0",
     "oxfmt": "^0.70.0",
