@@ -1,0 +1,6 @@
+{
+  "options": {
+    "disable": ["bulk-memory", "nontrapping-f2i"],
+    "exportStart": "_start"
+  }
+}

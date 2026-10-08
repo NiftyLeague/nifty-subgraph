@@ -1,4 +1,7 @@
-import { newMockEvent } from 'matchstick-as'
+// AssemblyScript 0.28 package resolution no longer honors `ascMain` for bare
+// imports under Matchstick's `--lib node_modules`, so import the entry file by
+// its package subpath like the other test files do.
+import { newMockEvent } from 'matchstick-as/assembly/index'
 import { ethereum, Address, BigInt } from '@graphprotocol/graph-ts'
 import {
   Approval,
