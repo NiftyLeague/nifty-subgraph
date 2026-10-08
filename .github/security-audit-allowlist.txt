@@ -20,3 +20,11 @@ GHSA-pmwg-cvhr-8vh7
 # field is null. Dev-tooling transitive (graph-cli tooling chain) with a
 # build-time stack-exhaustion scenario only; revisit when >3.0.3 publishes.
 GHSA-vfj7-8cjw-p6xm
+
+# stream-json advisories (GHSA-hqr4-qq8f-hg3x, GHSA-mjw6-4jj6-33hc): fixed
+# only in the ESM-only stream-json 3.6.0+ line, which cannot be overridden
+# into graph-cli's CJS jayson usage (same rationale as the 1.x allowlist in
+# scripts/audit.sh). Dev-only transitive; not shipped by the deployed
+# subgraph.
+GHSA-hqr4-qq8f-hg3x
+GHSA-mjw6-4jj6-33hc

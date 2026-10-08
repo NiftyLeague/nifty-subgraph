@@ -23,12 +23,24 @@ fi
 # `streamers/StreamValues` and `utils/Verifier` subpaths jayson requires, so
 # overriding to it breaks graph-cli. Drop this id when jayson or graph-cli
 # moves off stream-json 1.x.
+#
+# GHSA-hqr4-qq8f-hg3x and GHSA-mjw6-4jj6-33hc (also stream-json@1.9.1) share
+# that rationale: both are fixed only in the ESM-only 3.6.0+ line, which still
+# cannot be overridden into graph-cli's CJS jayson usage, and the tree is
+# dev-only.
+#
+# GHSA-vfj7-8cjw-p6xm (braces, high): no patched release exists as of
+# 2026-10-03 (3.0.3 is the newest npm version and the advisory's patched field
+# is null). Dev-tooling transitive of the graph-cli tooling chain with a
+# build-time stack-exhaustion scenario only; drop when a fixed version
+# publishes.
 ALLOWLIST=(
   GHSA-3g43-6gmg-66jw GHSA-3p68-rc4w-qgx5 GHSA-43fc-jf86-j433 GHSA-528h-pc64-c93x
   GHSA-h39j-r5qq-r9mm GHSA-5c9x-8gcm-mpgx GHSA-62hf-57xw-28j9 GHSA-6chq-wfr3-2hj9
-  GHSA-7q8q-rj6j-mhjq
+  GHSA-7q8q-rj6j-mhjq GHSA-hqr4-qq8f-hg3x
   GHSA-898c-q2cr-xwhg GHSA-fvcv-3m26-pcqx GHSA-hfxv-24rg-xrqf GHSA-j5f8-grm9-p9fc
-  GHSA-jr5f-v2jv-69x6 GHSA-m7pr-hjqh-92cm GHSA-mmx7-hfxf-jppx GHSA-mp2f-45pm-3cg9
+  GHSA-jr5f-v2jv-69x6 GHSA-m7pr-hjqh-92cm GHSA-mjw6-4jj6-33hc GHSA-mmx7-hfxf-jppx
+  GHSA-mp2f-45pm-3cg9 GHSA-vfj7-8cjw-p6xm
   GHSA-p92q-9vqr-4j8v GHSA-pf86-5x62-jrwf GHSA-pjwm-pj3p-43mv GHSA-pmwg-cvhr-8vh7
   GHSA-vf2m-468p-8v99 GHSA-w9j2-pvgh-6h63 GHSA-wf5p-g6vw-rhxx GHSA-xhjh-pmcv-23jw
   GHSA-xx6v-rp6x-q39c
