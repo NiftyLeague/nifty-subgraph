@@ -75,17 +75,20 @@ The frontend endpoint above is dead and must not be restored by editing this doc
 
 ## Deployment health monitoring
 
-`Subgraph Deployment Health` (`.github/workflows/subgraph-health.yml`) runs every six hours and on manual dispatch. It runs the credential-safe live audit against the configured deployment, renders the result with `scripts/health-summary.mjs`, and reports indexing errors, the indexed block range, the source-chain head, and block lag.
+`Subgraph Deployment Health` (`.github/workflows/subgraph-health.yml`) runs every six hours and on manual dispatch, with one lane per environment. Each lane runs the credential-safe live audit against its configured deployment, renders the result with `scripts/health-summary.mjs`, and reports indexing errors, the indexed block range, the source-chain head, and block lag.
 
 Repository configuration, all of it outside the repository:
 
-| Setting                      | Kind                | Required | Purpose                                       |
-| ---------------------------- | ------------------- | -------- | --------------------------------------------- |
-| `SUBGRAPH_PERFORMANCE_URL`   | Repository variable | Yes      | GraphQL endpoint of the deployment to probe   |
-| `SUBGRAPH_CHAIN_RPC_URL`     | Repository variable | Yes      | Source-chain JSON-RPC used for the lag sample |
-| `SUBGRAPH_PERFORMANCE_TOKEN` | Repository secret   | No       | Bearer token when the endpoint requires one   |
+| Setting                              | Kind                | Required | Purpose                                               |
+| ------------------------------------ | ------------------- | -------- | ----------------------------------------------------- |
+| `SUBGRAPH_PERFORMANCE_URL`           | Repository variable | Yes      | GraphQL endpoint of the production deployment         |
+| `SUBGRAPH_CHAIN_RPC_URL`             | Repository variable | Yes      | Source-chain JSON-RPC used for the lag sample         |
+| `SUBGRAPH_PERFORMANCE_TOKEN`         | Repository secret   | No       | Bearer token when the endpoint requires one           |
+| `SUBGRAPH_STAGING_PERFORMANCE_URL`   | Repository variable | Yes      | GraphQL endpoint of the staging deployment            |
+| `SUBGRAPH_STAGING_CHAIN_RPC_URL`     | Repository variable | Yes      | Source-chain JSON-RPC used for the staging lag sample |
+| `SUBGRAPH_STAGING_PERFORMANCE_TOKEN` | Repository secret   | No       | Bearer token when the staging endpoint requires one   |
 
-The same three names are listed in `.env.example` for local runs. With the two required settings absent, the workflow reports that the probe is not configured and does not raise an incident.
+The production names are listed in `.env.example` for local runs. The staging lane mirrors production one-for-one against the `SUBGRAPH_STAGING_*` names so the environments can never cross-wire endpoints or tokens. Each lane tracks its own incidents under the `health-check` (production) or `health-check-staging` (staging) label. With either lane's required settings absent, that lane reports that it is not configured and does not raise an incident; the shared `docker-compose.yml` graph-node stack is laptop-local, so staging monitoring requires pointing the staging variables at a deployment a runner can reach.
 
 The probe is credential safe by construction. The audit report records query timings, block numbers, and whether a bearer token was used, never the endpoint or the token; the workflow captures the audit's own error text instead of echoing it, because a failed fetch would otherwise print the endpoint, and this repository is public. The verdict comes from the `live.*` checks only, so a slow local build budget on the runner cannot be reported as a deployment incident.
 
