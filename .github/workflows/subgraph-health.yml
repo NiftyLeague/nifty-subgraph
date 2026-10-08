@@ -7,8 +7,8 @@ on:
     - cron: '23 */6 * * *'
   workflow_dispatch:
 
-# The probe reads the endpoint from repository configuration and reports
-# through a single tracking issue, so it needs nothing else.
+# The probes read their endpoints from repository configuration and report
+# through one tracking issue per environment, so they need nothing else.
 permissions:
   contents: read
   issues: write
@@ -138,4 +138,133 @@ jobs:
           fi
 
           echo "::error::Deployment health probe reported a degraded deployment."
+          exit 1
+
+  # The staging lane mirrors the production lane one-for-one against the
+  # SUBGRAPH_STAGING_* configuration so the two environments can never
+  # cross-wire endpoints or tokens through indirection. Both lanes stay
+  # unconfigured-safe: an unset pair disables the lane instead of raising a
+  # false incident. Point the staging variables at a shared staging graph-node
+  # (the docker-compose stack is laptop-local and unreachable from a runner;
+  # see docs/PERFORMANCE.md).
+  health-staging:
+    name: Health (staging)
+    if: vars.CI_BILLING_PAUSED != 'true'
+    runs-on: ubuntu-slim
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .mise.toml
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Read repository configuration
+        id: config
+        env:
+          SUBGRAPH_PERFORMANCE_URL: ${{ vars.SUBGRAPH_STAGING_PERFORMANCE_URL }}
+          SUBGRAPH_CHAIN_RPC_URL: ${{ vars.SUBGRAPH_STAGING_CHAIN_RPC_URL }}
+        run: |
+          # The endpoint and the source-chain RPC live in repository variables,
+          # never in the repository. An unset pair disables the probe instead of
+          # failing the run, so an unconfigured staging deployment does not raise
+          # a false incident every six hours.
+          if [ -z "$SUBGRAPH_PERFORMANCE_URL" ] || [ -z "$SUBGRAPH_CHAIN_RPC_URL" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Set the SUBGRAPH_STAGING_PERFORMANCE_URL and SUBGRAPH_STAGING_CHAIN_RPC_URL repository variables to enable the staging deployment health probe."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Probe the deployment
+        id: probe
+        if: steps.config.outputs.configured == 'true'
+        env:
+          SUBGRAPH_PERFORMANCE_URL: ${{ vars.SUBGRAPH_STAGING_PERFORMANCE_URL }}
+          SUBGRAPH_PERFORMANCE_TOKEN: ${{ secrets.SUBGRAPH_STAGING_PERFORMANCE_TOKEN }}
+          SUBGRAPH_CHAIN_RPC_URL: ${{ vars.SUBGRAPH_STAGING_CHAIN_RPC_URL }}
+        run: |
+          set +e
+          # stderr is captured, never echoed: a failed fetch would otherwise
+          # print the endpoint, and this repository is public.
+          bun run performance:live > health-report.json 2> probe-error.log
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Summarize the probe
+        id: summary
+        if: always() && steps.config.outputs.configured == 'true'
+        run: |
+          set +e
+          bun scripts/health-summary.mjs health-report.json > health-summary.md
+          verdict=$?
+          set -e
+          cat health-summary.md >> "$GITHUB_STEP_SUMMARY"
+          echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Probe diagnostics"
+            echo
+            echo "The staging live audit exited ${{ steps.probe.outputs.exit }}. The audit's"
+            echo "own error text is withheld because it can echo the endpoint. Re-run"
+            echo "\`bun run performance:live\` locally with the documented environment to"
+            echo "reproduce it."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the report
+        if: always() && steps.config.outputs.configured == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: subgraph-health-report-staging
+          path: health-report.json
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Publish the verdict
+        if: always() && steps.config.outputs.configured == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERDICT: ${{ steps.summary.outputs.verdict }}
+        run: |
+          gh label create health-check-staging --color 0xD97706 --description 'Scheduled staging deployment health probe' >/dev/null 2>&1 || true
+          number=$(gh issue list --state open --label health-check-staging --limit 1 --json number --jq '.[0].number // empty')
+
+          if [ "$VERDICT" = "0" ]; then
+            if [ -n "$number" ]; then
+              {
+                echo 'Staging deployment health recovered on this run.'
+                echo
+                cat health-summary.md
+              } > health-body.md
+              gh issue close "$number" --comment "$(cat health-body.md)" >/dev/null
+            fi
+            exit 0
+          fi
+
+          if [ -n "$number" ]; then
+            {
+              echo 'Staging still degraded on this run.'
+              echo
+              cat health-summary.md
+            } > health-body.md
+            gh issue comment "$number" --body-file health-body.md >/dev/null
+          else
+            {
+              echo 'The scheduled staging deployment probe reported a degraded result.'
+              echo
+              cat health-summary.md
+            } > health-body.md
+            gh issue create \
+              --title 'health: staging subgraph deployment degraded' \
+              --label health-check-staging \
+              --body-file health-body.md >/dev/null
+          fi
+
+          echo "::error::Staging deployment health probe reported a degraded deployment."
           exit 1
