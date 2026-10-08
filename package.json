@@ -39,8 +39,8 @@
     "assemblyscript": "0.28.20",
     "lint-staged": "17.6.0",
     "matchstick-as": "0.6.0",
-    "oxfmt": "^0.70.0",
-    "oxlint": "^1.85.0",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "typescript": "^7.0.2",
     "wabt": "1.0.39"
   },
