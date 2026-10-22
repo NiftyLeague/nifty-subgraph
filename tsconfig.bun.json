@@ -6,7 +6,7 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "types": ["bun", "node"],
+    "types": ["bun-types", "node"],
     "allowJs": true
   },
   "include": ["scripts/**/*.ts", "bun-tests/**/*.ts"]
