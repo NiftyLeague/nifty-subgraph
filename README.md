@@ -24,9 +24,11 @@ This subgraph indexes `NiftyDegen` ERC-721 contract events (Transfer, Approval, 
 
 ## Prerequisites
 
-- [bun](https://bun.sh) ^1.3 (via [mise](https://mise.jdx.dev) — `.mise.toml` pins the version)
+- [bun](https://bun.sh) 1.4.4 (via [mise](https://mise.jdx.dev) — `.mise.toml` pins the version)
 - [Node.js](https://nodejs.org) ^24.18
 - [graph-cli](https://thegraph.com/docs/en/developing/creating-a-subgraph/) (`bun add --global @graphprotocol/graph-cli`)
+
+`bun run type:check` uses `bun check -p tsconfig.bun.json` for Bun tests and tooling, then `graph build` for AssemblyScript mappings. Formatting stays on Oxfmt.
 
 ## Quick Start
 
