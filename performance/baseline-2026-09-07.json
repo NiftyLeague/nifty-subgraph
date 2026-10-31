@@ -7,7 +7,7 @@
     "cpu": "Apple M2 Max",
     "logicalCpuCount": 12,
     "totalMemoryBytes": 68719476736,
-    "bun": "1.4.0",
+    "bun": "1.4.4",
     "node": "v24.18.0"
   },
   "local": {
