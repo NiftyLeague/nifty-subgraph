@@ -41,22 +41,25 @@
     "bun-types": "1.4.4",
     "lint-staged": "17.6.0",
     "matchstick-as": "0.6.0",
-    "oxfmt": "^0.72.0",
-    "oxlint": "^1.87.0",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "typescript": "^7.0.2",
     "wabt": "1.0.39"
   },
   "overrides": {
+    "axios": "0.34.0",
     "cross-spawn": "7.0.6",
     "decompress": "npm:@xhmikosr/decompress@^11.1.4",
     "ejs": "3.1.10",
+    "follow-redirects": "1.16.2",
     "glob": "11.1.0",
     "immutable": "5.1.8",
     "js-yaml": "4.3.2",
     "semver": "7.8.5",
-    "undici": "8.10.2",
+    "undici": "8.12.2",
     "uuid": "11.1.1",
-    "yaml": "2.8.3"
+    "yaml": "2.8.3",
+    "zod": "4.6.6"
   },
   "engines": {
     "node": "24.18.0"
