@@ -92,7 +92,7 @@ jobs:
       ci-runner: ubuntu-slim
       test-runner: ubuntu-slim
       unit-runner: ubuntu-slim
-      performance-runner: ubuntu-latest
+      performance-runner: ubuntu-24.04
       security-runner: ubuntu-slim
       eval-runner: ubuntu-slim
       codeql-runner: ubuntu-latest

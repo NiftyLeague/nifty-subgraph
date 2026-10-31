@@ -4,7 +4,7 @@ This document records milestone M0's reproducible local and live production base
 
 ## Baseline
 
-Captured on 2026-09-07 (America/Puerto_Rico) from `codex/m0-performance-audit` at its M0 working tree, using Bun 1.4.0, Node 24.18.0, macOS 25.6 arm64, and an Apple M2 Max with 12 logical CPUs and 64 GiB RAM.
+Captured on 2026-09-07 (America/Puerto_Rico) from `codex/m0-performance-audit` at its M0 working tree, using Bun 1.4.4, Node 24.18.0, macOS 25.6 arm64, and an Apple M2 Max with 12 logical CPUs and 64 GiB RAM.
 
 | Area               | Fixture                                      |            Baseline |                 Budget |
 | ------------------ | -------------------------------------------- | ------------------: | ---------------------: |
