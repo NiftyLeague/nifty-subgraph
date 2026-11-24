@@ -25,15 +25,15 @@ jobs:
       issues: read
       packages: read
       security-events: write
-    uses: 0xPlayerOne/code-foundry/.github/workflows/validation.yml@v1.48.4
+    uses: AndrewM-F/code-foundry/.github/workflows/validation.yml@v1.54.6
     with:
       mode: audit
-      runtime-repository: 0xPlayerOne/code-foundry
-      runtime-ref: v1.48.4
+      runtime-repository: AndrewM-F/code-foundry
+      runtime-ref: v1.54.6
       ci-runner: ubuntu-slim
       test-runner: ubuntu-slim
       unit-runner: ubuntu-slim
-      performance-runner: ubuntu-latest
+      performance-runner: ubuntu-24.04
       security-runner: ubuntu-slim
       codeql-runner: ubuntu-latest
       rust-shards: '["all"]'
